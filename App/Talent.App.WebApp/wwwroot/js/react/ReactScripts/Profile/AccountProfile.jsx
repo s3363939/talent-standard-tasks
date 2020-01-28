@@ -180,6 +180,74 @@ export default class AccountProfile extends React.Component {
                                                 saveProfileData={this.updateAndSaveData}
                                             />
                                         </FormItemWrapper>
+                                        <FormItemWrapper
+                                            title='Nationality'
+                                            tooltip='Select your nationality'
+                                        >
+                                            <Nationality
+                                                nationalityData={this.state.profileData.nationality}
+                                                saveProfileData={this.updateAndSaveData}
+                                            />
+                                        </FormItemWrapper>
+                                        <FormItemWrapper
+                                            title='Languages'
+                                            tooltip='Select languages that you speak'
+                                        >
+                                            <Language
+                                                languageData={this.state.profileData.languages}
+                                                updateProfileData={this.updateAndSaveData}
+                                            />
+                                        </FormItemWrapper>
+                                        <FormItemWrapper
+                                            title='Skills'
+                                            tooltip='List your skills'
+                                        >
+                                            <Skill
+                                                skillData={this.state.profileData.skills}
+                                                updateProfileData={this.updateAndSaveData}
+                                            />
+                                        </FormItemWrapper>
+                                        <FormItemWrapper
+                                            title='Work experience'
+                                            tooltip='Add your work experience'
+                                        >
+                                            <Experience
+                                                experienceData={this.state.profileData.experience}
+                                                updateProfileData={this.updateAndSaveData}
+                                            />
+                                        </FormItemWrapper>
+                                        <FormItemWrapper
+                                            title='Visa Status'
+                                            tooltip='What is your current Visa/Citizenship status?'
+                                        >
+                                            <VisaStatus
+                                                visaStatus={this.state.profileData.visaStatus}
+                                                visaExpiryDate={this.state.profileData.visaExpiryDate}
+                                                updateProfileData={this.updateWithoutSave}
+                                                saveProfileData={this.updateAndSaveData}
+                                            />
+                                        </FormItemWrapper>
+                                        <FormItemWrapper
+                                            title='Status'
+                                            tooltip='What is your current status in jobseeking?'
+                                        >
+                                            <TalentStatus
+                                                status={this.state.profileData.jobSeekingStatus}
+                                                updateProfileData={this.updateWithoutSave}
+                                                saveProfileData={this.updateAndSaveData}
+                                            />
+                                        </FormItemWrapper>
+                                        <FormItemWrapper
+                                            title='Profile Photo'
+                                            tooltip='Please upload your profile photo'
+                                            hideSegment={true}
+                                        >
+                                            <PhotoUpload
+                                                imageId={this.state.profileData.profilePhotoUrl}
+                                                updateProfileData={this.updateWithoutSave}
+                                                savePhotoUrl='http://localhost:60290/profile/profile/updateProfilePhoto'
+                                            />
+                                        </FormItemWrapper>
                                     </div>
                                 </form>
                             </div >

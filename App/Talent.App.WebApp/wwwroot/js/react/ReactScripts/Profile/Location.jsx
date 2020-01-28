@@ -27,6 +27,7 @@ export class Address extends React.Component {
         this.openEdit = this.openEdit.bind(this)
         this.closeEdit = this.closeEdit.bind(this)
         this.handleChange = this.handleChange.bind(this)
+        this.handleDropdownChange = this.handleDropdownChange.bind(this)
         this.saveContact = this.saveContact.bind(this)
         this.renderEdit = this.renderEdit.bind(this)
         this.renderDisplay = this.renderDisplay.bind(this)
@@ -54,6 +55,25 @@ export class Address extends React.Component {
         })
     }
 
+    handleDropdownChange(event) {
+        var data = Object.assign({}, this.props.location);
+        //required
+        const name = event.target.name;
+        let value = event.target.value;
+        const id = event.target.id;
+
+        data[name] = value;
+        if (name == "country") {
+            data["city"] = "";
+        }
+        var updateData = {
+            target: { name: "location", value: data }
+        }
+
+        //update props here
+        this.props.updateProfileData(updateData);
+    }
+
     saveContact() {
         console.log(this.state.newAddress)
         const data = Object.assign({}, this.state.newAddress)
@@ -68,50 +88,62 @@ export class Address extends React.Component {
     }
 
     renderEdit() {
+        const countriesOptions = Object.keys(Countries).map((x) => <option key={x} value={x}>{x}</option>); 
+
         return (
             <div className='ui sixteen wide column'>
-                <ChildSingleInput
-                    inputType="text"
-                    label="Number"
+                <label>Number</label>
+                <input
+                    type="text"
                     name="number"
                     value={this.state.newAddress.number}
-                    controlFunc={this.handleChange}
-                    maxLength={5}
                     placeholder="Number"
-                    errorMessage="Number"
+                    maxLength={10}
+                    onChange={this.handleChange}
                 />
-                <ChildSingleInput
-                    inputType="text"
-                    label="Street"
+                <label>Street</label>
+                <input
+                    type="text"
                     name="street"
                     value={this.state.newAddress.street}
-                    controlFunc={this.handleChange}
+                    placeholder="street name"
                     maxLength={80}
-                    placeholder="Street"
-                    errorMessage="Street"
+                    onChange={this.handleChange}
                 />
-                <ChildSingleInput
-                    inputType="text"
-                    label="Suburb"
+                <label>Suburb</label>
+                <input
+                    type="text"
                     name="suburb"
                     value={this.state.newAddress.suburb}
-                    controlFunc={this.handleChange}
-                    maxLength={80}
-                    placeholder="Suburb"
-                    errorMessage="Suburb"
+                    placeholder="suburb name"
+                    maxLength={20}
+                    onChange={this.handleChange}
                 />
-
-                <ChildSingleInput
-                    inputType="text"
-                    label="Postcode"
+                <select className="ui right labeled dropdown"
+                    placeholder="Country"
+                    value=""
+                    onChange={this.handleDropdownChange}
+                    name="country">
+                    <option value="">Select a country</option>
+                    {countriesOptions}
+                </select>
+                <select className="ui right labeled dropdown"
+                    placeholder="City"
+                    value=""
+                    onChange={this.handleDropdownChange}
+                    name="city">
+                    <option value="">Select a city</option>
+                    {countriesOptions}
+                </select>
+                <label>Postcode</label>
+                <input
+                    type="text"
                     name="postcode"
                     value={this.state.newAddress.postcode}
-                    controlFunc={this.handleChange}
-                    maxLength={10}
-                    placeholder="Postcode"
-                    errorMessage="Postcode"
+                    placeholder="postcode"
+                    maxLength={20}
+                    onChange={this.handleChange}
                 />
-
                 <button type="button" className="ui teal button" onClick={this.saveContact}>Save</button>
                 <button type="button" className="ui button" onClick={this.closeEdit}>Cancel</button>
             </div>
@@ -142,11 +174,33 @@ export class Address extends React.Component {
 export class Nationality extends React.Component {
     constructor(props) {
         super(props)
-       
+
+        this.handleChange = this.handleChange.bind(this)
     }
 
+    handleChange(event) {
+        const data = Object.assign({}, this.state.newAddress)
+        data[event.target.name] = event.target.value
+        this.setState({
+            newAddress: data
+        })
+    }
     
     render() {
-                
+        
+        const countriesOptions = Object.keys(Countries).map((x) => <option key={x} value={x}>{x}</option>);  
+
+        return (
+            <div className='ui sixteen wide column'>
+                <select className="ui right labeled dropdown"
+                    placeholder="Country"
+                    value=""
+                    onChange={this.handleChange}
+                    name="nationality">
+                    <option value="">Select your nationality</option>
+                    {countriesOptions}
+                </select>
+            </div>
+        )
     }
 }
