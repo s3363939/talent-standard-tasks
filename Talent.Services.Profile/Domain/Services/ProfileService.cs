@@ -87,8 +87,36 @@ namespace Talent.Services.Profile.Domain.Services
 
         public async Task<bool> UpdateTalentProfile(TalentProfileViewModel model, string updaterId)
         {
-            //Your code here;
-            throw new NotImplementedException();
+            try
+            {
+                if (model.Id != null)
+                {
+                    User existingUser = await _userRepository.GetByIdAsync(model.Id);
+
+                    existingUser.Email = model.Email;
+                    existingUser.FirstName = model.FirstName;
+                    existingUser.LastName = model.LastName;
+                    existingUser.LinkedAccounts = model.LinkedAccounts;
+                    existingUser.Phone = model.Phone;
+                    existingUser.Description = model.Description;
+                    existingUser.Summary = model.Summary;
+                    existingUser.Address = model.Address;
+                    existingUser.Nationality = model.Nationality;
+                    //existingUser.Languages = model.Languages;
+
+                    existingUser.UpdatedBy = updaterId;
+                    existingUser.UpdatedOn = DateTime.Now;
+
+                    await _userRepository.Update(existingUser);
+
+                    return true;
+                }
+                return false;
+            }
+            catch (MongoException e)
+            {
+                return false;
+            }
         }
 
         public async Task<EmployerProfileViewModel> GetEmployerProfile(string Id, string role)

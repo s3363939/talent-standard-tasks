@@ -1,14 +1,22 @@
 ﻿/* Social media JSX */
-import React from 'react';
+import React, { Component } from "react";
 import { ChildSingleInput } from '../Form/SingleInput.jsx';
 import { Popup } from 'semantic-ui-react';
 
-export default class SocialMediaLinkedAccount extends React.Component {
+export class SocialMediaLinkedAccount extends Component {
     constructor(props) {
         super(props);
 
+        const socialAccounts = this.props.linkedAccounts ?
+            Object.assign({}, this.props.linkedAccounts)
+            : {
+                linkedIn: "",
+                github: ""
+            }
+
         this.state = {
-            showEditSection: false
+            showEditSection: false,
+            newContact: { linkedAccounts: socialAccounts }
         }
 
         this.openEdit = this.openEdit.bind(this)
@@ -37,19 +45,18 @@ export default class SocialMediaLinkedAccount extends React.Component {
     }
 
     handleChange(event) {
-        /*const data = Object.assign({}, this.state.newContact)
-        data[event.target.name] = event.target.value
+        const data = Object.assign({}, this.state.newContact)
+        data.linkedAccounts[event.target.name] = event.target.value
         this.setState({
             newContact: data
-        })*/
+        })
     }
 
     saveContact() {
-        /*console.log(this.props.componentId)
         console.log(this.state.newContact)
         const data = Object.assign({}, this.state.newContact)
-        this.props.controlFunc(this.props.componentId, data)
-        this.closeEdit()*/
+        this.props.saveProfileData(data)
+        this.closeEdit()
     }
 
     render() {
@@ -59,13 +66,24 @@ export default class SocialMediaLinkedAccount extends React.Component {
     }
 
     renderEdit() {
+        let linkedIn = "";
+        let github = "";
+        //console.log("linkedIn", this.state.newContact.linkedAccounts.linkedIn)
+        if (this.state.newContact.linkedAccounts.linkedIn) {
+            linkedIn = this.state.newContact.linkedAccounts.linkedIn
+            console.log("linkedIn", linkedIn)
+        }
+
+        if (this.state.newContact.linkedAccounts.github) {
+            github = this.state.newContact.linkedAccounts.github
+        }
         return (
             <div className='ui sixteen wide column'>
                 <ChildSingleInput
                     inputType="text"
-                    label="LinkedIn"
-                    name="LinkedIn"
-                    value={this.state.newContact.lastName}
+                    label="linkedIn"
+                    name="linkedIn"
+                    value={linkedIn}
                     controlFunc={this.handleChange}
                     maxLength={100}
                     placeholder="Enter your LinkedIn Url"
@@ -73,11 +91,11 @@ export default class SocialMediaLinkedAccount extends React.Component {
                 />
                 <ChildSingleInput
                     inputType="text"
-                    label="GitHub"
-                    name="GitHub"
-                    value={this.state.newContact.lastName}
+                    label="github"
+                    name="github"
+                    value={github}
                     controlFunc={this.handleChange}
-                    maxLength={80}
+                    maxLength={100}
                     placeholder="Enter your GitHub Url"
                     errorMessage="Please enter a valid Url"
                 />      
@@ -92,8 +110,8 @@ export default class SocialMediaLinkedAccount extends React.Component {
         return (
             <div className='row'>
                 <div className="ui sixteen wide column">
-                    <button type="button" className="ui left floated teal button" disabled>LinkedIn</button>
-                    <button type="button" className="ui left floated teal button" disabled>GitHub</button>
+                    <button type="button" className="ui left floated linkedin button" >LinkedIn</button>
+                    <button type="button" className="ui left floated github button" >GitHub</button>
                     <button type="button" className="ui right floated teal button" onClick={this.openEdit}>Edit</button>
                 </div>
             </div>

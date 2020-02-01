@@ -1,15 +1,20 @@
 ﻿/* Language section */
 import React from 'react';
 import Cookies from 'js-cookie';
-import { Table } from 'semantic-ui-react';
+import { Icon, Button, Table } from 'semantic-ui-react';
 
-export default class Language extends React.Component {
+export class Language extends React.Component {
     constructor(props) {
         super(props);
 
+        this.state = {
+            languages: this.props.languageData ? this.props.languageData : [],
+            showAddSection: false
+        }
+
         this.handleChange = this.handleChange.bind(this)
         this.addLanguage = this.addLanguage.bind(this)
-        this.addNewLanguage = this.addNewLanguage.bind(this)
+        this.addNewLanguageSection = this.addNewLanguageSection.bind(this)
 
     }
 
@@ -19,7 +24,7 @@ export default class Language extends React.Component {
     addLanguage(event) {
     }
 
-    addNewLanguage(event) {
+    addNewLanguageSection(event) {
     }
 
     cancel() {
@@ -53,7 +58,7 @@ export default class Language extends React.Component {
                             <Table.Row>
                                 <Table.HeaderCell>Language</Table.HeaderCell>
                                 <Table.HeaderCell>Level</Table.HeaderCell>
-                                <Table.HeaderCell><button type="button" className="ui teal button" onClick={this.addNewLanguage}>Add New</button></Table.HeaderCell>
+                                <Table.HeaderCell><Button className="ui teal button" onClick={this.addNewLanguageSection} ><Icon name='plus' />Add New</Button></Table.HeaderCell>
                             </Table.Row>
                         </Table.Header>
 

@@ -1,10 +1,10 @@
 ﻿import React from 'react';
 import Cookies from 'js-cookie';
-import SocialMediaLinkedAccount from './SocialMediaLinkedAccount.jsx';
+import { SocialMediaLinkedAccount } from './SocialMediaLinkedAccount.jsx';
 import { IndividualDetailSection } from './ContactDetail.jsx';
 import FormItemWrapper from '../Form/FormItemWrapper.jsx';
 import { Address, Nationality } from './Location.jsx';
-import Language from './Language.jsx';
+import { Language } from './Language.jsx';
 import Skill from './Skill.jsx';
 import Education from './Education.jsx';
 import Certificate from './Certificate.jsx';
@@ -24,6 +24,10 @@ export default class AccountProfile extends React.Component {
 
         this.state = {
             profileData: {
+                firstName: "",
+                lastName: "",
+                email: "",
+                phone: "",
                 address: {},
                 nationality: '',
                 education: [],
@@ -41,7 +45,9 @@ export default class AccountProfile extends React.Component {
                 jobSeekingStatus: {
                     status: "",
                     availableDate: null
-                }
+                },
+                summary: "",
+                description: ""
             },
             loaderData: loaderData,
 
@@ -95,6 +101,7 @@ export default class AccountProfile extends React.Component {
         this.setState({
             profileData: newProfile
         }, this.saveProfile)
+        //console.log("profile", this.state.profileData)
     }
 
     updateForComponentId(componentId, newValues) {
@@ -133,8 +140,11 @@ export default class AccountProfile extends React.Component {
             firstName: this.state.profileData.firstName,
             lastName: this.state.profileData.lastName,
             email: this.state.profileData.email,
-            phone: this.state.profileData.phone
+            phone: this.state.profileData.phone,
+            summary: this.state.profileData.summary,
+            description: this.state.profileData.description
         }
+        //console.log('profile', profile)
         return (
             <BodyWrapper reload={this.loadData} loaderData={this.state.loaderData}>
                 <section className="page-body">
@@ -155,8 +165,8 @@ export default class AccountProfile extends React.Component {
                                         </FormItemWrapper>
                                         <FormItemWrapper title='Self Introduction'>
                                             <SelfIntroduction
-                                                summary={this.state.profileData.summary}
-                                                description={this.state.profileData.description}
+                                                summary={profile.summary}
+                                                description={profile.description}
                                                 updateProfileData={this.updateAndSaveData}
                                                 updateWithoutSave={this.updateWithoutSave}
                                             />
@@ -167,7 +177,7 @@ export default class AccountProfile extends React.Component {
                                         >
                                             <IndividualDetailSection
                                                 controlFunc={this.updateForComponentId}
-                                                details={profile}
+                                                details={this.state.profileData}
                                                 componentId='contactDetails'
                                             />
                                         </FormItemWrapper>     
@@ -243,7 +253,7 @@ export default class AccountProfile extends React.Component {
                                             hideSegment={true}
                                         >
                                             <PhotoUpload
-                                                imageId={this.state.profileData.profilePhotoUrl}
+                                                imageSrc={this.state.profileData.profilePhotoUrl}
                                                 updateProfileData={this.updateWithoutSave}
                                                 savePhotoUrl='http://localhost:60290/profile/profile/updateProfilePhoto'
                                             />

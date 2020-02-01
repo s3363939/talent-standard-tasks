@@ -6,41 +6,63 @@ export class SelfIntroduction extends Component {
         super(props);
 
         this.state = {
-            characters: 0,
-            summary: props.Summary,
-            description: props.description
-        };
+            newContact: {
+                summary: this.props.summary,
+                description: this.props.description
+            }
+        }
+
         this.updateDescription = this.updateDescription.bind(this);
         this.updateSummary = this.updateSummary.bind(this);
+        this.saveDescription = this.saveDescription.bind(this);
     };
 
     updateDescription(event) {
-        let data = {};
+        const data = Object.assign({}, this.state.newContact)
         data[event.target.name] = event.target.value;
-        this.props.updateWithoutSave(data);
+        //this.props.updateWithoutSave(data);
         let description = event.target.value;
         this.setState({
-            characters: description.length
+            newContact: data
         })
     }
 
     updateSummary(event) {
-        let data = {};
+        const data = Object.assign({}, this.state.newContact)
         data[event.target.name] = event.target.value;
-        this.props.updateWithoutSave(data);
+        //this.props.updateWithoutSave(data);
         let summary = event.target.value;
         this.setState({
-            characters: summary.length
+            newContact: data
         })
     }
 
-    saveDescription(event) {
+    /*handleChange(event) {
+        const data = Object.assign({}, this.state.newContact)
+        data[event.target.name] = event.target.value
+        this.setState({
+            newContact: data
+        })
+    }*/
 
+    saveDescription() {
+        const data = Object.assign({}, this.state.newContact)
+        this.props.updateProfileData(data)
     }
 
     render() {
         const characterLimit = 600;
         //let characters = this.props.description ? this.props.description.length : 0;
+        let summary = "";
+        let description = "";
+        //console.log('summary', this.props.summary)
+        if (this.props.summary) {
+            summary = this.props.summary
+        }
+
+        if (this.state.newContact.description) {
+            description = this.state.newContact.description
+        }
 
         return (
             <React.Fragment>
@@ -51,9 +73,9 @@ export class SelfIntroduction extends Component {
                     <div className="field" >
                         <input
                             type="text"
-                            value={this.state.summary}
+                            value={summary}
                             label="Summary"
-                            name="Summary"
+                            name="summary"
                             onChange={this.updateSummary}
                             maxLength={150}
                             placeholder="Please provide a short summary about yourself"
@@ -63,9 +85,9 @@ export class SelfIntroduction extends Component {
                     <div className="field" >
                         <textarea
                             maxLength={characterLimit}
-                            name="Description"
+                            name="description"
                             placeholder="Please tell us about any hobbies, additional expertise, or anything else you’d like to add."
-                            value={this.state.description}
+                            value={description}
                             onChange={this.updateDescription} >
                         </textarea>
                     </div>

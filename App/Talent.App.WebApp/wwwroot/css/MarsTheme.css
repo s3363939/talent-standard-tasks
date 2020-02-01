@@ -287,6 +287,30 @@
     text-shadow: none;
 }
 
+.ui.linkedin.button {
+    background-color: #0e76a8;
+    color: #FFFFFF;
+    text-shadow: none;
+}
+
+.ui.linkedin.button:hover {
+    background-color: #0e76a8;
+    color: #FFFFFF;
+    text-shadow: none;
+}
+
+.ui.github.button {
+    background-color: black;
+    color: #FFFFFF;
+    text-shadow: none;
+}
+
+.ui.github.button:hover {
+    background-color: black;
+    color: #FFFFFF;
+    text-shadow: none;
+}
+
 .ui.basic.green.button {
     box-shadow: 0px 0px 0px 1px #fff inset !important;
     color: #fff !important;

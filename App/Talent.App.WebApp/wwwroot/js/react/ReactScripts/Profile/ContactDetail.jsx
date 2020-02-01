@@ -2,6 +2,7 @@
 import Cookies from 'js-cookie';
 import { ChildSingleInput } from '../Form/SingleInput.jsx';
 import { Location } from '../Employer/CreateJob/Location.jsx';
+
 export class IndividualDetailSection extends Component {
     constructor(props) {
         super(props)
@@ -65,6 +66,17 @@ export class IndividualDetailSection extends Component {
     }
 
     renderEdit() {
+        let email = "";
+        let phone = "";
+
+        if (this.state.newContact.email) {
+            email = this.state.newContact.email
+        }
+
+        if (this.state.newContact.phone) {
+            phone = this.state.newContact.phone
+        }
+
         return (
             <div className='ui sixteen wide column'>
                 <ChildSingleInput
@@ -91,7 +103,7 @@ export class IndividualDetailSection extends Component {
                     inputType="text"
                     label="Email address"
                     name="email"
-                    value={this.state.newContact.email}
+                    value={email}
                     controlFunc={this.handleChange}
                     maxLength={80}
                     placeholder="Enter an email"
@@ -102,7 +114,7 @@ export class IndividualDetailSection extends Component {
                     inputType="text"
                     label="Phone number"
                     name="phone"
-                    value={this.state.newContact.phone}
+                    value={phone}
                     controlFunc={this.handleChange}
                     maxLength={12}
                     placeholder="Enter a phone number"
