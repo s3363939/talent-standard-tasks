@@ -311,6 +311,40 @@
     text-shadow: none;
 }
 
+.ui.edit.button {
+    background-color: #FFFFFF;
+    color: black;
+}
+
+.ui.edit.button:hover {
+    background-color: #FFFFFF;
+    color: black;
+}
+
+.ui.delete.button {
+    background-color: #FFFFFF;
+    color: black;
+}
+
+.ui.delete.button:hover {
+    background-color: #FFFFFF;
+    color: black;
+}
+
+.ui.update.button {
+    background-color: #FFFFFF;
+    color: #449bc6;
+    border-radius: 3px;
+    border: 1px solid;
+}
+
+.ui.cancel.button {
+    background-color: #FFFFFF;
+    color: red;
+    border-radius: 3px;
+    border: 1px solid;
+}
+
 .ui.basic.green.button {
     box-shadow: 0px 0px 0px 1px #fff inset !important;
     color: #fff !important;

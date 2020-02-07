@@ -1,9 +1,9 @@
 ﻿/* Skill section */
 import React from 'react';
 import Cookies from 'js-cookie';
-import { Table } from 'semantic-ui-react';
+import { Icon, Table } from 'semantic-ui-react';
 
-export default class Skill extends React.Component {
+export class Skill extends React.Component {
     constructor(props) {
         super(props);
 

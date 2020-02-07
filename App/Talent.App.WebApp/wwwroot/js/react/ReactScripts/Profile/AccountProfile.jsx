@@ -5,7 +5,7 @@ import { IndividualDetailSection } from './ContactDetail.jsx';
 import FormItemWrapper from '../Form/FormItemWrapper.jsx';
 import { Address, Nationality } from './Location.jsx';
 import { Language } from './Language.jsx';
-import Skill from './Skill.jsx';
+import { Skill } from './Skill.jsx';
 import Education from './Education.jsx';
 import Certificate from './Certificate.jsx';
 import VisaStatus from './VisaStatus.jsx'
