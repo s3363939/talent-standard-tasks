@@ -63,18 +63,18 @@ export class Skill extends React.Component {
     }
 
     addSkill() {
-        var Skill = this.state.skills
+        var skills = this.state.skills
         var addSkill = this.state.addSkill
-        if (Skill.length > 0) {
-            addSkill.id = Skill[Skill.length - 1].id + 1
+        if (skills.length > 0) {
+            addSkill.id = skills[skills.length - 1].id + 1
         } else {
             addSkill.id = 0
         }
 
-        Skill.push(addSkill)
+        skills.push(addSkill)
 
         this.setState({
-            Skills: Skill,
+            skills: skills,
             showAddSection: false,
             addSkill: {
                 skillName: '',
@@ -174,7 +174,8 @@ export class Skill extends React.Component {
                     <option value="Expert">Expert</option>
                 </select>
                 <button type="button" className="ui teal button" onClick={this.addSkill}>Add</button>
-                <button type="button" className="ui button" onClick={() => { this.cancelAddSkill() }}>Cancel</button></div >)
+                <button type="button" className="ui button" onClick={() => { this.cancelAddSkill() }}>Cancel</button>
+            </div >)
     }
 
     renderUpdateRow(skill) {

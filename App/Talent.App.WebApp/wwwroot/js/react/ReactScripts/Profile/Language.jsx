@@ -175,7 +175,8 @@ export class Language extends React.Component {
                     <option value="Native/Bilingual">Native/Bilingual</option>
                 </select>
                 <button type="button" className="ui teal button" onClick={this.addLanguage}>Add</button>
-                <button type="button" className="ui button" onClick={() => { this.cancelAddLanguage() }}>Cancel</button></div >)
+                <button type="button" className="ui button" onClick={() => { this.cancelAddLanguage() }}>Cancel</button>
+            </div >)
     }
 
     renderUpdateRow(language) {

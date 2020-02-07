@@ -13,7 +13,7 @@ import PhotoUpload from './PhotoUpload.jsx';
 import VideoUpload from './VideoUpload.jsx';
 import CVUpload from './CVUpload.jsx';
 import { SelfIntroduction } from './SelfIntroduction.jsx';
-import Experience from './Experience.jsx';
+import { Experience } from './Experience.jsx';
 import { BodyWrapper, loaderData } from '../Layout/BodyWrapper.jsx';
 import { LoggedInNavigation } from '../Layout/LoggedInNavigation.jsx';
 import TalentStatus from './TalentStatus.jsx';
