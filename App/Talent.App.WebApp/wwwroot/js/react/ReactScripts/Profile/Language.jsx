@@ -1,6 +1,5 @@
 ﻿/* Language section */
 import React from 'react';
-import Cookies from 'js-cookie';
 import { Icon, Table } from 'semantic-ui-react';
 
 export class Language extends React.Component {
@@ -8,15 +7,17 @@ export class Language extends React.Component {
         super(props);
 
         this.state = {
-            languages: props.languageData ? props.languageData : [],
+            newContact: {
+                languages: props.languageData
+            },
             showAddSection: false,
             addLanguage: {
-                id: '',
-                languageName: '',
+                id: 0,
+                name: '',
                 level: ''
             },
             updateLanguage: {
-                languageName: '',
+                name: '',
                 level: ''
             },
             editId: ''
@@ -33,7 +34,6 @@ export class Language extends React.Component {
         this.renderAddLanguage = this.renderAddLanguage.bind(this)
         this.renderUpdateRow = this.renderUpdateRow.bind(this)
         this.renderRow = this.renderRow.bind(this)
-
     }
 
     handleChange(event) {
@@ -63,67 +63,68 @@ export class Language extends React.Component {
     }
 
     addLanguage() {
-        var lang = this.state.languages
         var addLang = this.state.addLanguage
-        if (lang.length > 0) {
-            addLang.id = lang[lang.length - 1].id + 1
-        } else {
-            addLang.id = 0
-        }
+        var langs = this.props.languageData
+        var data = Object.assign({}, this.state.newContact)
+        data.languages = langs
+        addLang.id = addLang.id + 1
+        data.languages.push(addLang)
 
-        lang.push(addLang)
-
+        this.props.updateProfileData(data)
         this.setState({
-            languages: lang,
             showAddSection: false,
-            addLanguage: {
-                languageName: '',
-                level: ''
-            }
-        })
+            addLanguage: { name: '', level: '' }})
     }
 
     deleteLanguage(id) {
         var i;
-        var langs = this.state.languages
+        var langs = this.props.languageData
+        var data = Object.assign({}, this.state.newContact)
         for (i = 0; i < langs.length; i++) {
             if (langs[i].id == id) {
                 langs.splice(i, 1)
             }
         }
-        this.setState({ languages: langs })
+        this.setState({ newContact: { languages: langs } })
+        data.languages = langs
+        this.props.updateProfileData(data)
     }
 
     updateLanguage(id) {
         var i
-        var langs = this.state.languages
+        var langs = this.props.languageData
+        var data = Object.assign({}, this.state.newContact)
         var addLang = this.state.updateLanguage
         for (i = 0; i < langs.length; i++) {
             if (langs[i].id == id) {
-                if (!addLang.languageName)
-                    addLang.languageName = langs[i].languageName
+                if (!addLang.name)
+                    addLang.name = langs[i].name
                 if (!addLang.level)
                     addLang.level = langs[i].level
 
                 langs[i] = Object.assign({}, langs[i], addLang)
             }
         }
+        data.languages = langs
         this.setState({
-            languages: langs,
+            newContact: {
+                languages: langs
+            },
             editId: '',
-            updateLanguage: { languageName: '', level: '' }
+            updateLanguage: { name: '', level: '' }
         })
+        this.props.updateProfileData(data)
     }
 
     cancelAddLanguage() {
         this.setState({
-            showAddSection: false, addLanguage: { languageName: '', level: '' }
+            showAddSection: false, addLanguage: { name: '', level: '' }
         })
     }
 
     cancelUpdateLanguage() {
         this.setState({
-            editId: '', updateLanguage: { languageName: '', level: '' }
+            editId: '', updateLanguage: { name: '', level: '' }
         })
     }
 
@@ -146,7 +147,7 @@ export class Language extends React.Component {
                             </Table.Row>
                         </Table.Header>
                         <Table.Body>
-                            {this.state.languages.map(language => language.id === this.state.editId ? this.renderUpdateRow(language) : this.renderRow(language))}
+                            {this.props.languageData.map(language => language.id === this.state.editId ? this.renderUpdateRow(language) : this.renderRow(language))}
                         </Table.Body>
                     </Table>
                 </div >
@@ -158,8 +159,8 @@ export class Language extends React.Component {
             <div>
                 <input
                     type="text"
-                    name="languageName"
-                    value={this.state.addLanguage.languageName ? this.state.addLanguage.languageName : ''}
+                    name="name"
+                    value={this.state.addLanguage.name ? this.state.addLanguage.name : ''}
                     placeholder="Add Language"
                     maxLength={20}
                     onChange={this.handleChange}
@@ -185,8 +186,8 @@ export class Language extends React.Component {
                 <Table.Cell>
                     <input
                         type="text"
-                        name="languageName"
-                        value={this.state.updateLanguage.languageName ? this.state.updateLanguage.languageName : language.languageName}
+                        name="name"
+                        value={this.state.updateLanguage.name ? this.state.updateLanguage.name : language.name}
                         placeholder="Add Language"
                         maxLength={20}
                         onChange={this.handleUpdate}
@@ -214,7 +215,7 @@ export class Language extends React.Component {
     renderRow(language) {
         return (
             <Table.Row key={language.id}>
-                <Table.Cell>{language.languageName}</Table.Cell>
+                <Table.Cell>{language.name}</Table.Cell>
                 <Table.Cell>{language.level}</Table.Cell>
                 <Table.Cell>
                     <button type="button" className="ui edit button" onClick={() => this.setState({ editId: language.id })} > <Icon name='edit' /></button>

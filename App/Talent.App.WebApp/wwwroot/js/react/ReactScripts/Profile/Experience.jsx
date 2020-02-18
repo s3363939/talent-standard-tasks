@@ -170,9 +170,7 @@ export class Experience extends React.Component {
                     updateExperience: Object.assign({}, this.state.experiences[i])
                 })
             }
-        }
-
-        
+        }        
     }
 
     render() {

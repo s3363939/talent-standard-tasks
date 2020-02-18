@@ -2,7 +2,7 @@
 import React from 'react'
 import Cookies from 'js-cookie';
 
-export default class PhotoUpload extends React.Component {
+export class PhotoUpload extends React.Component {
 
     constructor(props) {
         super(props);

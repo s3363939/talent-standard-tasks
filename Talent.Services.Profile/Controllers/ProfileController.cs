@@ -145,8 +145,12 @@ namespace Talent.Services.Profile.Controllers
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "talent")]
         public ActionResult AddLanguage([FromBody] AddLanguageViewModel language)
         {
-            //Your code here;
-            throw new NotImplementedException();
+            String talentId = _userAppContext.CurrentUserId;
+            var newLanguage = language;
+            newLanguage.CurrentUserId = talentId;
+            //var userProfile = await _profileService.GetTalentProfile(talentId);
+
+            return Json(new { Success = true });
         }
 
         [HttpPost("updateLanguage")]
@@ -313,7 +317,7 @@ namespace Talent.Services.Profile.Controllers
             throw new NotImplementedException();
         }
 
-     
+
         #endregion
 
         #region EmployerOrRecruiter
@@ -358,7 +362,7 @@ namespace Talent.Services.Profile.Controllers
             if (ModelState.IsValid)
             {
                 //check if employer is client 5be40d789b9e1231cc0dc51b
-                var recruiterClients =(await _recruiterRepository.GetByIdAsync(_userAppContext.CurrentUserId)).Clients;
+                var recruiterClients = (await _recruiterRepository.GetByIdAsync(_userAppContext.CurrentUserId)).Clients;
 
                 if (recruiterClients.Select(x => x.EmployerId == employer.Id).FirstOrDefault())
                 {
@@ -403,7 +407,7 @@ namespace Talent.Services.Profile.Controllers
             //Your code here;
             throw new NotImplementedException();
         }
-        
+
         #endregion
 
         #region TalentFeed
@@ -414,7 +418,7 @@ namespace Talent.Services.Profile.Controllers
         {
             String talentId = String.IsNullOrWhiteSpace(id) ? _userAppContext.CurrentUserId : id;
             var userProfile = await _profileService.GetTalentProfile(talentId);
-          
+
             return Json(new { Success = true, data = userProfile });
         }
 
@@ -575,11 +579,11 @@ namespace Talent.Services.Profile.Controllers
         {
             try
             {
-                var result=await _profileService.GetClientListAsync(_userAppContext.CurrentUserId);
+                var result = await _profileService.GetClientListAsync(_userAppContext.CurrentUserId);
 
                 return Json(new { Success = true, result });
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 return Json(new { Success = false, e.Message });
             }

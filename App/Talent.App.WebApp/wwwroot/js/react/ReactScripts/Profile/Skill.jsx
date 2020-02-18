@@ -1,6 +1,5 @@
 ﻿/* Skill section */
 import React from 'react';
-import Cookies from 'js-cookie';
 import { Icon, Table } from 'semantic-ui-react';
 
 export class Skill extends React.Component {
@@ -8,15 +7,17 @@ export class Skill extends React.Component {
         super(props);
 
         this.state = {
-            skills: props.skills ? props.skills : [],
+            newContact: {
+                skills: props.skillData ? props.skillData : []
+            },
             showAddSection: false,
             addSkill: {
-                id: '',
-                skillName: '',
+                id: 0,
+                name: '',
                 level: ''
             },
             updateSkill: {
-                skillName: '',
+                name: '',
                 level: ''
             },
             editId: ''
@@ -63,21 +64,19 @@ export class Skill extends React.Component {
     }
 
     addSkill() {
-        var skills = this.state.skills
         var addSkill = this.state.addSkill
-        if (skills.length > 0) {
-            addSkill.id = skills[skills.length - 1].id + 1
-        } else {
-            addSkill.id = 0
-        }
+        var skills = this.props.skillData
+        var data = Object.assign({}, this.state.newContact)
+        data.skills = skills
+        addSkill.id = addSkill.id + 1
+        data.skills.push(addSkill)
 
-        skills.push(addSkill)
-
+        this.props.updateProfileData(data)
+        
         this.setState({
-            skills: skills,
             showAddSection: false,
             addSkill: {
-                skillName: '',
+                name: '',
                 level: ''
             }
         })
@@ -85,45 +84,53 @@ export class Skill extends React.Component {
 
     deleteSkill(id) {
         var i;
-        var skills = this.state.skills
+        var skills = this.props.skillData
+        var data = Object.assign({}, this.state.newContact)
         for (i = 0; i < skills.length; i++) {
             if (skills[i].id == id) {
                 skills.splice(i, 1)
             }
         }
-        this.setState({ skills: skills })
+        this.setState({ newContact: { skills: skills } })
+        data.skills = skills
+        this.props.updateProfileData(data)
     }
 
     updateSkill(id) {
         var i
-        var skills = this.state.skills
+        var skills = this.props.skillData
+        var data = Object.assign({}, this.state.newContact)
         var addSkill = this.state.updateSkill
         for (i = 0; i < skills.length; i++) {
             if (skills[i].id == id) {
-                if (!addSkill.skillName)
-                    addSkill.skillName = skills[i].skillName
+                if (!addSkill.name)
+                    addSkill.name = skills[i].name
                 if (!addSkill.level)
                     addSkill.level = skills[i].level
 
                 skills[i] = Object.assign({}, skills[i], addSkill)
             }
         }
+        data.skills = skills
         this.setState({
-            skills: skills,
+            newContact: {
+                skills: skills
+            },
             editId: '',
-            updateSkill: { skillName: '', level: '' }
+            updateSkill: { name: '', level: '' }
         })
+        this.props.updateProfileData(data)
     }
 
     cancelAddSkill() {
         this.setState({
-            showAddSection: false, addSkill: { skillName: '', level: '' }
+            showAddSection: false, addSkill: { name: '', level: '' }
         })
     }
 
     cancelUpdateSkill() {
         this.setState({
-            editId: '', updateSkill: { skillName: '', level: '' }
+            editId: '', updateSkill: { name: '', level: '' }
         })
     }
 
@@ -146,7 +153,7 @@ export class Skill extends React.Component {
                             </Table.Row>
                         </Table.Header>
                         <Table.Body>
-                            {this.state.skills.map(skill => skill.id === this.state.editId ? this.renderUpdateRow(skill) : this.renderRow(skill))}
+                            {this.props.skillData.map(skill => skill.id === this.state.editId ? this.renderUpdateRow(skill) : this.renderRow(skill))}
                         </Table.Body>
                     </Table>
                 </div >
@@ -158,8 +165,8 @@ export class Skill extends React.Component {
             <div>
                 <input
                     type="text"
-                    name="skillName"
-                    value={this.state.addSkill.skillName ? this.state.addSkill.skillName : ''}
+                    name="name"
+                    value={this.state.addSkill.name ? this.state.addSkill.name : ''}
                     placeholder="Add Skill"
                     maxLength={20}
                     onChange={this.handleChange}
@@ -184,8 +191,8 @@ export class Skill extends React.Component {
                 <Table.Cell>
                     <input
                         type="text"
-                        name="skillName"
-                        value={this.state.updateSkill.skillName ? this.state.updateSkill.skillName : skill.skillName}
+                        name="name"
+                        value={this.state.updateSkill.name ? this.state.updateSkill.name : skill.name}
                         placeholder="Add Skill"
                         maxLength={20}
                         onChange={this.handleUpdate}
@@ -212,7 +219,7 @@ export class Skill extends React.Component {
     renderRow(skill) {
         return (
             <Table.Row key={skill.id}>
-                <Table.Cell>{skill.skillName}</Table.Cell>
+                <Table.Cell>{skill.name}</Table.Cell>
                 <Table.Cell>{skill.level}</Table.Cell>
                 <Table.Cell>
                     <button type="button" className="ui edit button" onClick={() => this.setState({ editId: skill.id })} > <Icon name='edit' /></button>

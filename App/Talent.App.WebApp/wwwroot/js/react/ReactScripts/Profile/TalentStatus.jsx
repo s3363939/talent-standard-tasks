@@ -1,25 +1,51 @@
 ﻿import React from 'react'
 import { Form, Checkbox } from 'semantic-ui-react';
-import { SingleInput } from '../Form/SingleInput.jsx';
+import DatePicker from 'react-datepicker';
 
-export default class TalentStatus extends React.Component {
+export class TalentStatus extends React.Component {
     constructor(props) {
         super(props);
 
+        const status = this.props.status ?
+            Object.assign({}, this.props.status)
+            : {
+                status: "",
+                availableDate: null
+            }
+
         this.state = {
+            newContact: { jobSeekingStatus: status },
             check: ""
         }
         
         this.handleChange = this.handleChange.bind(this)
     }
 
+    handleChange(event, { value }) {
+        const data = Object.assign({}, this.state.newContact)
 
-    //handleChange = (e, { value }) => this.setState({ value })
-
-    handleChange(event,{ value }) {
+        switch (value) {
+            case '1':
+                data.jobSeekingStatus.status = 'Actively looking for a job';
+                break;
+            case '2':
+                data.jobSeekingStatus.status = 'Not looking for a job at the moment';
+                break;
+            case '3':
+                data.jobSeekingStatus.status = 'Currently employed but open to offers';
+                break;
+            case '4':
+                data.jobSeekingStatus.status = 'Will be available on later date';
+                break;
+            default:
+                data.jobSeekingStatus.status =''
+        }
+               
         this.setState({
+            newContact: data,
             check: value
         })
+        this.props.saveProfileData(data)
     }
 
     render() {
@@ -67,7 +93,7 @@ export default class TalentStatus extends React.Component {
                         checked={this.state.check === '4'}
                         onChange={this.handleChange}
                     />
-                </Form.Field>                
+                </Form.Field>
             </div>
         )
 

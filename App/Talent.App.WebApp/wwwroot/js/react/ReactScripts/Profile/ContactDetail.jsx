@@ -66,24 +66,13 @@ export class IndividualDetailSection extends Component {
     }
 
     renderEdit() {
-        let email = "";
-        let phone = "";
-
-        if (this.state.newContact.email) {
-            email = this.state.newContact.email
-        }
-
-        if (this.state.newContact.phone) {
-            phone = this.state.newContact.phone
-        }
-
         return (
             <div className='ui sixteen wide column'>
                 <ChildSingleInput
                     inputType="text"
                     label="First Name"
                     name="firstName"
-                    value={this.state.newContact.firstName}
+                    value={this.state.newContact.firstName ? this.state.newContact.firstName : ''}
                     controlFunc={this.handleChange}
                     maxLength={80}
                     placeholder="Enter your first name"
@@ -103,7 +92,7 @@ export class IndividualDetailSection extends Component {
                     inputType="text"
                     label="Email address"
                     name="email"
-                    value={email}
+                    value={this.state.newContact.email}
                     controlFunc={this.handleChange}
                     maxLength={80}
                     placeholder="Enter an email"
@@ -114,7 +103,7 @@ export class IndividualDetailSection extends Component {
                     inputType="text"
                     label="Phone number"
                     name="phone"
-                    value={phone}
+                    value={this.state.newContact.phone ? this.newContact.phone : ""}
                     controlFunc={this.handleChange}
                     maxLength={12}
                     placeholder="Enter a phone number"

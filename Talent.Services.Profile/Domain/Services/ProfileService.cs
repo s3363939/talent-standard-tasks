@@ -43,10 +43,31 @@ namespace Talent.Services.Profile.Domain.Services
             _fileService = fileService;
         }
 
-        public bool AddNewLanguage(AddLanguageViewModel language)
+        public async Task<bool> AddNewLanguageAsync(AddLanguageViewModel language)
         {
-            //Your code here;
-            throw new NotImplementedException();
+            try
+            {
+                if (language != null)
+                {
+                    var newLanguage = new UserLanguage
+                    {
+                        Id = ObjectId.GenerateNewId().ToString(),
+                        IsDeleted = false
+                    };
+
+                    UpdateLanguageFromView(language, newLanguage);
+
+
+                    await _userLanguageRepository.Add(newLanguage);
+
+                    return true;
+                }
+                return false;
+            }
+            catch (MongoException e)
+            {
+                return false;
+            }
         }
 
         public async Task<TalentProfileViewModel> GetTalentProfile(string Id)
@@ -55,12 +76,12 @@ namespace Talent.Services.Profile.Domain.Services
             if (profile != null)
             {
                 var skills = profile.Skills.Select(x => ViewModelFromSkill(x)).ToList();
-                //var languages = profile.Languages.Select(x => ViewModelFromLanguage(x)).ToList();
+                var languages = profile.Languages.Select(x => ViewModelFromLanguage(x)).ToList();
                 var result = new TalentProfileViewModel
                 {
                     Id = profile.Id,
                     Address = profile.Address,
-                    //Languages = languages,
+                    Languages = languages,
                     LinkedAccounts = profile.LinkedAccounts,
                     FirstName = profile.FirstName,
                     LastName = profile.LastName,
@@ -76,6 +97,7 @@ namespace Talent.Services.Profile.Domain.Services
                     IsMobilePhoneVerified = profile.IsMobilePhoneVerified,
                     Skills = skills,
                     Summary = profile.Summary,
+                    Description = profile.Description,
                     ProfilePhoto = profile.ProfilePhoto,
                     ProfilePhotoUrl = profile.ProfilePhotoUrl,
                     VideoName = profile.VideoName
@@ -102,7 +124,24 @@ namespace Talent.Services.Profile.Domain.Services
                     existingUser.Summary = model.Summary;
                     existingUser.Address = model.Address;
                     existingUser.Nationality = model.Nationality;
-                    //existingUser.Languages = model.Languages;
+
+                    var newLanguages = new List<UserLanguage>();
+                    foreach (var item in model.Languages)
+                    {
+                        var language = existingUser.Languages.SingleOrDefault(x => x.Id == item.Id);
+                        if (language == null)
+                        {
+                            language = new UserLanguage
+                            {
+                                Id = ObjectId.GenerateNewId().ToString(),
+                                IsDeleted = false
+                            };
+                        }
+                        UpdateLanguageFromView(item, language);
+                        newLanguages.Add(language);
+                    }
+
+                    existingUser.Languages = newLanguages;
 
                     existingUser.UpdatedBy = updaterId;
                     existingUser.UpdatedOn = DateTime.Now;
@@ -377,6 +416,12 @@ namespace Talent.Services.Profile.Domain.Services
             original.Skill = model.Name;
         }
 
+        protected void UpdateLanguageFromView(AddLanguageViewModel model, UserLanguage original)
+        {
+            original.LanguageLevel = model.Level;
+            original.Language = model.Name;
+        }
+
         #endregion
 
         #region Build Views from Model
@@ -388,6 +433,16 @@ namespace Talent.Services.Profile.Domain.Services
                 Id = skill.Id,
                 Level = skill.ExperienceLevel,
                 Name = skill.Skill
+            };
+        }
+
+        protected AddLanguageViewModel ViewModelFromLanguage(UserLanguage language)
+        {
+            return new AddLanguageViewModel
+            {
+                Id = language.Id,
+                Level = language.LanguageLevel,
+                Name = language.Language
             };
         }
 
@@ -408,7 +463,7 @@ namespace Talent.Services.Profile.Domain.Services
             //Your code here;
             throw new NotImplementedException();
         }
-         
+
         public async Task<int> GetTotalTalentsForClient(string clientId, string recruiterId)
         {
             //Your code here;

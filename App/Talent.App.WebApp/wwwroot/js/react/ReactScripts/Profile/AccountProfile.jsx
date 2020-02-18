@@ -8,15 +8,15 @@ import { Language } from './Language.jsx';
 import { Skill } from './Skill.jsx';
 import Education from './Education.jsx';
 import Certificate from './Certificate.jsx';
-import VisaStatus from './VisaStatus.jsx'
-import PhotoUpload from './PhotoUpload.jsx';
+import { VisaStatus } from './VisaStatus.jsx';
+import { PhotoUpload } from './PhotoUpload.jsx';
 import VideoUpload from './VideoUpload.jsx';
 import CVUpload from './CVUpload.jsx';
 import { SelfIntroduction } from './SelfIntroduction.jsx';
 import { Experience } from './Experience.jsx';
 import { BodyWrapper, loaderData } from '../Layout/BodyWrapper.jsx';
 import { LoggedInNavigation } from '../Layout/LoggedInNavigation.jsx';
-import TalentStatus from './TalentStatus.jsx';
+import { TalentStatus } from './TalentStatus.jsx';
 
 export default class AccountProfile extends React.Component {
     constructor(props) {
@@ -65,7 +65,7 @@ export default class AccountProfile extends React.Component {
         let loaderData = this.state.loaderData;
         loaderData.allowedUsers.push("Talent");
         loaderData.isLoading = false;
-        this.setState({ loaderData, })
+        this.setState({ loaderData })
     }
 
     componentDidMount() {
@@ -101,7 +101,7 @@ export default class AccountProfile extends React.Component {
         this.setState({
             profileData: newProfile
         }, this.saveProfile)
-        //console.log("profile", this.state.profileData)
+        console.log("profile", this.state.profileData)
     }
 
     updateForComponentId(componentId, newValues) {
@@ -136,15 +136,7 @@ export default class AccountProfile extends React.Component {
     }
 
     render() {
-        const profile = {
-            firstName: this.state.profileData.firstName,
-            lastName: this.state.profileData.lastName,
-            email: this.state.profileData.email,
-            phone: this.state.profileData.phone,
-            summary: this.state.profileData.summary,
-            description: this.state.profileData.description
-        }
-        //console.log('profile', profile)
+        //console.log("profile", this.state.profileData)
         return (
             <BodyWrapper reload={this.loadData} loaderData={this.state.loaderData}>
                 <section className="page-body">
@@ -165,8 +157,8 @@ export default class AccountProfile extends React.Component {
                                         </FormItemWrapper>
                                         <FormItemWrapper title='Self Introduction'>
                                             <SelfIntroduction
-                                                summary={profile.summary}
-                                                description={profile.description}
+                                                summary={this.state.profileData.summary}
+                                                description={this.state.profileData.description}
                                                 updateProfileData={this.updateAndSaveData}
                                                 updateWithoutSave={this.updateWithoutSave}
                                             />

@@ -7,8 +7,8 @@ export class SocialMediaLinkedAccount extends Component {
     constructor(props) {
         super(props);
 
-        const socialAccounts = this.props.linkedAccounts ?
-            Object.assign({}, this.props.linkedAccounts)
+        const socialAccounts = props.linkedAccounts ?
+            Object.assign({}, props.linkedAccounts)
             : {
                 linkedIn: "",
                 github: ""
@@ -33,8 +33,10 @@ export class SocialMediaLinkedAccount extends Component {
     }*/
 
     openEdit() {
+        const socialAccounts = Object.assign({}, this.props.linkedAccounts)
         this.setState({
-            showEditSection: true
+            showEditSection: true,
+            newContact: { linkedAccounts: socialAccounts }
         })
     }
 
@@ -53,7 +55,6 @@ export class SocialMediaLinkedAccount extends Component {
     }
 
     saveContact() {
-        console.log(this.state.newContact)
         const data = Object.assign({}, this.state.newContact)
         this.props.saveProfileData(data)
         this.closeEdit()
@@ -66,24 +67,13 @@ export class SocialMediaLinkedAccount extends Component {
     }
 
     renderEdit() {
-        let linkedIn = "";
-        let github = "";
-        //console.log("linkedIn", this.state.newContact.linkedAccounts.linkedIn)
-        if (this.state.newContact.linkedAccounts.linkedIn) {
-            linkedIn = this.state.newContact.linkedAccounts.linkedIn
-            console.log("linkedIn", linkedIn)
-        }
-
-        if (this.state.newContact.linkedAccounts.github) {
-            github = this.state.newContact.linkedAccounts.github
-        }
         return (
             <div className='ui sixteen wide column'>
                 <ChildSingleInput
                     inputType="text"
                     label="linkedIn"
                     name="linkedIn"
-                    value={linkedIn}
+                    value={this.state.newContact.linkedAccounts.linkedIn ? this.state.newContact.linkedAccounts.linkedIn : ""}
                     controlFunc={this.handleChange}
                     maxLength={100}
                     placeholder="Enter your LinkedIn Url"
@@ -93,7 +83,7 @@ export class SocialMediaLinkedAccount extends Component {
                     inputType="text"
                     label="github"
                     name="github"
-                    value={github}
+                    value={this.state.newContact.linkedAccounts.github ? this.state.newContact.linkedAccounts.github : ""}
                     controlFunc={this.handleChange}
                     maxLength={100}
                     placeholder="Enter your GitHub Url"

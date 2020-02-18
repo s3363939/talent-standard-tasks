@@ -186,7 +186,7 @@ export class Address extends React.Component {
     }
 
     renderDisplay() {
-
+        //console.log("render address: ", this.props.addressData)
         let fullAddress = this.props.addressData.number ? `${this.props.addressData.number}, ${this.props.addressData.street}, ${this.props.addressData.suburb}, ${this.props.addressData.postCode}` : ""
         let city = this.props.addressData ? this.props.addressData.city : ""
         let country = this.props.addressData ? this.props.addressData.country : ""
