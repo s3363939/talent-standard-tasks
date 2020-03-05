@@ -56,8 +56,17 @@ export class SocialMediaLinkedAccount extends Component {
 
     saveContact() {
         const data = Object.assign({}, this.state.newContact)
-        this.props.saveProfileData(data)
-        this.closeEdit()
+
+        var expression = /(https?:\/\/)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/
+        var regex = new RegExp(expression)
+        if (!data.linkedAccounts.linkedIn.match(regex) && data.linkedAccounts.linkedIn!="") {
+            TalentUtil.notification.show("LinkedIn URL invalid", "error", null, null)
+        } else if (!data.linkedAccounts.github.match(regex) && data.linkedAccounts.github != "") {
+            TalentUtil.notification.show("Github URL invalid", "error", null, null)
+        } else {
+            this.props.saveProfileData(data)
+            this.closeEdit()
+        }        
     }
 
     render() {

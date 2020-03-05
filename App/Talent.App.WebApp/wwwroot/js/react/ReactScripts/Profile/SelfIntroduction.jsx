@@ -21,7 +21,15 @@ export class SelfIntroduction extends Component {
             description: this.props.description            
         }
 
-        this.props.updateProfileData(data)
+        if (data.summary == null) {
+            TalentUtil.notification.show("Summary empty", "error", null, null)
+        } else if (data.description != null && data.description.length > 150) {
+            this.props.updateProfileData(data)
+        } else if (data.description == null || data.description == "") {
+            this.props.updateProfileData(data)
+        } else {
+            TalentUtil.notification.show("Description too short", "error", null, null)
+        }     
     }
 
     render() {

@@ -64,16 +64,21 @@ export class Language extends React.Component {
 
     addLanguage() {
         var addLang = this.state.addLanguage
-        var langs = this.props.languageData
-        var data = Object.assign({}, this.state.newContact)
-        data.languages = langs
-        addLang.id = addLang.id + 1
-        data.languages.push(addLang)
+        if (addLang.name == "" || addLang.level == "")
+            TalentUtil.notification.show("Please enter language and level", "error", null, null)
+        else {
+            var langs = this.props.languageData
+            var data = Object.assign({}, this.state.newContact)
+            data.languages = langs
+            addLang.id = addLang.id + 1
+            data.languages.push(addLang)
 
-        this.props.updateProfileData(data)
-        this.setState({
-            showAddSection: false,
-            addLanguage: { name: '', level: '' }})
+            this.props.updateProfileData(data)
+            this.setState({
+                showAddSection: false,
+                addLanguage: { name: '', level: '' }
+            })
+        }        
     }
 
     deleteLanguage(id) {

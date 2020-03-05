@@ -80,19 +80,29 @@ export class Address extends React.Component {
         this.setState({
             newAddress: data
         })
-        /*var updateData = {
-            target: { name: "location", value: data }
-        }*/
-        //update props here
-        //this.props.updateProfileData(updateData);
+
     }
 
     saveContact() {
-        //console.log(this.state.newAddress)
         const data = Object.assign({}, this.state.newAddress)
-        const newContact = { address: data}
-        this.props.saveProfileData(newContact)
-        this.closeEdit()
+        var alphanumeric = /^[a-zA-Z0-9 ]*$/
+        var alphanumRegex = new RegExp(alphanumeric)
+        var wholeNumbers = /^\d+$/
+        var numbersRegex = new RegExp(wholeNumbers)
+
+        if (data.number == "" || data.street == "" || data.suburb == "" || data.postCode == "" || data.city == "" || data.country == "") {
+            TalentUtil.notification.show("Please fill all the fields", "error", null, null)
+        } else {
+            if (!data.number.match(alphanumRegex)) {
+                TalentUtil.notification.show("Number invalid", "error", null, null)
+            } else if (!data.postCode.match(numbersRegex)) {
+                TalentUtil.notification.show("Postcode invalid", "error", null, null)
+            } else {
+                const newContact = { address: data }
+                this.props.saveProfileData(newContact)
+                this.closeEdit()
+            }            
+        }        
     }
 
     render() {

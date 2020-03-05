@@ -52,11 +52,39 @@ export class IndividualDetailSection extends Component {
     }
 
     saveContact() {
-        console.log(this.props.componentId)
-        console.log(this.state.newContact)
         const data = Object.assign({}, this.state.newContact)
-        this.props.controlFunc(this.props.componentId, data)
-        this.closeEdit()
+        var email = false
+        var phone = false
+
+        var emailExpression = /^([a-zA-Z0-9._%-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6})*$/
+        var phoneExpression = /^(?:(?:\(?(?:00|\+)([1-4]\d\d|[1-9]\d?)\)?)?[\-\.\ \\\/]?)?((?:\(?\d{1,}\)?[\-\.\ \\\/]?){0,})(?:[\-\.\ \\\/]?(?:#|ext\.?|extension|x)[\-\.\ \\\/]?(\d+))?$/
+        var emailRegex = new RegExp(emailExpression)
+        var phoneRegex = new RegExp(phoneExpression)
+        
+        if (data.phone) {
+            phone = data.phone.match(phoneRegex)
+        } else {
+            phone = false
+        }
+
+        if (data.email) {
+            email = data.email.match(emailRegex)
+        } else {
+            email = false
+        }
+
+        if (email && phone) {
+            this.props.controlFunc(this.props.componentId, data)
+            this.closeEdit()
+        } else if (!email && phone) {
+            TalentUtil.notification.show("Email address invalid or empty", "error", null, null)
+        } else if (email && !phone) {
+            TalentUtil.notification.show("Phone number invalid or empty", "error", null, null)
+        } else {
+            TalentUtil.notification.show("Email & phone invalid or empty", "error", null, null)
+        }
+
+        
     }
 
     render() {
@@ -103,7 +131,7 @@ export class IndividualDetailSection extends Component {
                     inputType="text"
                     label="Phone number"
                     name="phone"
-                    value={this.state.newContact.phone ? this.newContact.phone : ""}
+                    value={this.state.newContact.phone ? this.state.newContact.phone : ""}
                     controlFunc={this.handleChange}
                     maxLength={12}
                     placeholder="Enter a phone number"

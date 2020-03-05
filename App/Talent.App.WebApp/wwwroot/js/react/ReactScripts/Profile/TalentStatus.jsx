@@ -1,56 +1,77 @@
 ﻿import React from 'react'
-import { Form, Checkbox } from 'semantic-ui-react';
-import DatePicker from 'react-datepicker';
+import { Form, Checkbox } from 'semantic-ui-react'
+import DatePicker from 'react-datepicker'
+import Moment from 'moment'
 
 export class TalentStatus extends React.Component {
     constructor(props) {
         super(props);
-
-        const status = this.props.status ?
-            Object.assign({}, this.props.status)
-            : {
-                status: "",
-                availableDate: null
-            }
-
-        this.state = {
-            newContact: { jobSeekingStatus: status },
-            check: ""
-        }
         
         this.handleChange = this.handleChange.bind(this)
+        this.handleChangeAvailableDate = this.handleChangeAvailableDate.bind(this)
+
+        this.renderCheckBoxes = this.renderCheckBoxes.bind(this)
+        this.renderDate = this.renderDate.bind(this)
     }
 
     handleChange(event, { value }) {
-        const data = Object.assign({}, this.state.newContact)
+        let status = ''
 
         switch (value) {
             case '1':
-                data.jobSeekingStatus.status = 'Actively looking for a job';
+                status = 'Actively looking for a job';
                 break;
             case '2':
-                data.jobSeekingStatus.status = 'Not looking for a job at the moment';
+                status = 'Not looking for a job at the moment';
                 break;
             case '3':
-                data.jobSeekingStatus.status = 'Currently employed but open to offers';
+                status = 'Currently employed but open to offers';
                 break;
             case '4':
-                data.jobSeekingStatus.status = 'Will be available on later date';
+                status = 'Will be available on later date';
                 break;
             default:
-                data.jobSeekingStatus.status =''
+                status =''
         }
-               
-        this.setState({
-            newContact: data,
-            check: value
-        })
+
+        const data = {
+            jobSeekingStatus: {
+                status: status
+            }
+        }
         this.props.saveProfileData(data)
+    }
+
+    handleChangeAvailableDate(date) {
+        if (date <= Moment()) {
+            TalentUtil.notification.show("Select future date", "error", null, null)
+        } else {
+            const data = {
+                jobSeekingStatus: {
+                    status: this.props.status.status,
+                    availableDate: date
+                }
+            }
+            this.props.saveProfileData(data)
+        }        
     }
 
     render() {
         return (
-            <div className='ui sixteen wide column'>                
+            <div className='ui sixteen wide column'>   
+                {this.renderCheckBoxes()}
+                {this.renderDate()}
+            </div>)
+    }
+
+    renderCheckBoxes() {
+        let check = 'Actively looking for a job'
+
+        if (this.props.status != null)
+            check = this.props.status.status
+
+        return (
+            <div>
                 <Form.Field>
                     Current Status
                 </Form.Field>
@@ -60,7 +81,7 @@ export class TalentStatus extends React.Component {
                         label='Actively looking for a job'
                         name='checkboxRadioGroup'
                         value='1'
-                        checked={this.state.check === '1'}
+                        checked={check === 'Actively looking for a job'}
                         onChange={this.handleChange}
                     />
                 </Form.Field>
@@ -70,7 +91,7 @@ export class TalentStatus extends React.Component {
                         label='Not looking for a job at the moment'
                         name='checkboxRadioGroup'
                         value='2'
-                        checked={this.state.check === '2'}
+                        checked={check === 'Not looking for a job at the moment'}
                         onChange={this.handleChange}
                     />
                 </Form.Field>
@@ -80,7 +101,7 @@ export class TalentStatus extends React.Component {
                         label='Currently employed but open to offers'
                         name='checkboxRadioGroup'
                         value='3'
-                        checked={this.state.check === '3'}
+                        checked={check === 'Currently employed but open to offers'}
                         onChange={this.handleChange}
                     />
                 </Form.Field>
@@ -90,12 +111,30 @@ export class TalentStatus extends React.Component {
                         label='Will be available on later date'
                         name='checkboxRadioGroup'
                         value='4'
-                        checked={this.state.check === '4'}
+                        checked={check === 'Will be available on later date'}
                         onChange={this.handleChange}
                     />
                 </Form.Field>
-            </div>
-        )
+            </div>)
+    }
 
+    renderDate() {
+        let display = false
+
+        if (this.props.status != null && this.props.status.status == 'Will be available on later date')
+            display = true
+
+        if (display == true) {
+            return (
+                <div>
+                    <label>Availability date</label>
+                    <DatePicker
+                        dateFormat="DD/MM/YYYY"
+                        name="available"
+                        selected={this.props.status.availableDate ? Moment(this.props.status.availableDate) : Moment()}
+                        onChange={this.handleChangeAvailableDate}
+                    />
+                </div>)
+        } else {return (<div/>)}
     }
 }

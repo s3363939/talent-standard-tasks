@@ -136,7 +136,7 @@ export default class AccountProfile extends React.Component {
     }
 
     render() {
-        //console.log("profile", this.state.profileData)
+        console.log("profile", this.state.profileData)
         return (
             <BodyWrapper reload={this.loadData} loaderData={this.state.loaderData}>
                 <section className="page-body">

@@ -1,7 +1,7 @@
 ﻿/* Experience section */
 import React from 'react';
-import Cookies from 'js-cookie';
 import DatePicker from 'react-datepicker';
+import Moment from 'moment';
 import { Icon, Table } from 'semantic-ui-react';
 
 export class Experience extends React.Component {
@@ -9,31 +9,40 @@ export class Experience extends React.Component {
         super(props);
 
         this.state = {
-            experiences: props.experiences ? props.experiences : [],
+            newContact: {
+                experience: props.experienceData ? props.experienceData : []
+            },
             showAddSection: false,
             addExperience: {
-                id: '',
+                id: 0,
                 company: '',
                 position: '',
-                startDate: '',
-                endDate: '',
+                start: '',
+                end: '',
                 responsibilities: ''
             },
             updateExperience: {
                 company: '',
                 position: '',
-                startDate: '',
-                endDate: '',
+                start: '',
+                end: '',
                 responsibilities: ''
             },
-            editId: ''
+            editId: '',
+            isEndEnabled: false
         }
 
         this.handleChange = this.handleChange.bind(this)
+        this.handleChangeStartDate = this.handleChangeStartDate.bind(this)
+        this.handleChangeEndDate = this.handleChangeEndDate.bind(this)
+        this.handleUpdateStartDate = this.handleUpdateStartDate.bind(this)
+        this.handleUpdateEndDate = this.handleUpdateEndDate.bind(this)
+        //this.handleSelect = this.handleSelect.bind(this)
         this.handleUpdate = this.handleUpdate.bind(this)
         this.add = this.add.bind(this)
         this.delete = this.delete.bind(this)
         this.update = this.update.bind(this)
+        this.edit = this.edit.bind(this)
         this.cancelAdd = this.cancelAdd.bind(this)
         this.cancelUpdate = this.cancelUpdate.bind(this)
 
@@ -56,6 +65,81 @@ export class Experience extends React.Component {
         })
     }
 
+    handleChangeStartDate(date) {
+        const startDate = date
+
+        var data = Object.assign({}, this.state.addExperience);
+        
+        let today = new Moment()
+        if (startDate >= today) {
+            TalentUtil.notification.show("Experience start date can't be today or in the future", "error", null, null)
+        }
+        else {
+            data.start = Moment(date)
+            this.setState({
+                addExperience: data,
+                isEndEnabled: true
+            })
+        }
+    }
+
+    handleChangeEndDate(date) {
+        const endDate = date
+
+        var data = Object.assign({}, this.state.addExperience);
+
+        let today = new Moment()
+        if (endDate <= data.start) {
+            TalentUtil.notification.show("Experience end date needs to be past start date", "error", null, null)
+        } else if (endDate >= today) {
+            TalentUtil.notification.show("Experience end date can't be today or in the future", "error", null, null)
+        } else {
+            data.end = Moment(date)
+            this.setState({
+               addExperience: data
+            })
+        }
+    }
+
+    handleUpdateStartDate(date) {
+        const startDate = date
+
+        var data = Object.assign({}, this.state.updateExperience);
+
+        let today = new Moment()
+        if (startDate >= today) {
+            TalentUtil.notification.show("Experience start date can't be today or in the future", "error", null, null)
+        }
+        else {
+            data.start = Moment(date)
+            this.setState({
+                updateExperience: data
+            })
+        }
+    }
+
+    handleUpdateEndDate(date) {
+        const endDate = date
+
+        var data = Object.assign({}, this.state.updateExperience);
+
+        let today = new Moment()
+        if (endDate <= data.start) {
+            TalentUtil.notification.show("Experience end date needs to be past start date", "error", null, null)
+        } else if (endDate >= today) {
+            TalentUtil.notification.show("Experience end date can't be today or in the future", "error", null, null)
+        } else {
+            data.end = Moment(date)
+            this.setState({
+                addExperience: data
+            })
+        }
+    }
+
+    /*handleSelect(event) {
+        console.log("handleSelect")
+    }*/
+
     handleUpdate(event) {
         var data = Object.assign({}, this.state.updateExperience);
 
@@ -70,75 +154,100 @@ export class Experience extends React.Component {
     }
 
     add() {
-        var experiences = this.state.experiences
+        var experiences = this.props.experienceData
         var addExperience = this.state.addExperience
+        var data = Object.assign({}, this.state.newContact)
 
-        if (experiences.length > 0) {
-            addExperience.id = experiences[experiences.length - 1].id + 1
-        } else {
-            addExperience.id = 0
-        }
-
-        experiences.push(addExperience)
-
-        this.setState({
-            experiences: experiences,
-            showAddSection: false,
-            addExperience: {
-                id: '',
-                company: '',
-                position: '',
-                startDate: '',
-                endDate: '',
-                responsibilities: ''
-            }
-        })
+        if (addExperience.company == '') {
+            TalentUtil.notification.show("Company field empty", "error", null, null)
+        } else if (addExperience.position == '') {
+            TalentUtil.notification.show("Position field empty", "error", null, null)
+        } else if (addExperience.start == '') {
+            TalentUtil.notification.show("Please select start date", "error", null, null)
+        } else if (addExperience.end == '') {
+            TalentUtil.notification.show("Please select end date", "error", null, null)
+        } else if (addExperience.responsibilities == '') {
+            TalentUtil.notification.show("Responsibilities field empty", "error", null, null)
+        } else {            
+            data.experience = experiences
+            addExperience.id = addExperience.id + 1
+            data.experience.push(addExperience)
+            this.props.updateProfileData(data)
+            this.setState({
+               showAddSection: false,
+               addExperience: {
+                    company: '',
+                    position: '',
+                    start: '',
+                    end: '',
+                    responsibilities: ''
+               },
+               isEndEnabled: false
+            })
+        }        
     }
 
     delete(id) {
         var i;
-        var experiences = this.state.experiences
+        var experiences = this.props.experienceData
+        var data = Object.assign({}, this.state.newContact)
         for (i = 0; i < experiences.length; i++) {
             if (experiences[i].id == id) {
                 experiences.splice(i, 1)
             }
         }
-        this.setState({ experiences: experiences })
+        this.setState({ newContact: { experience: experiences } })
+        data.experience = experiences
+        this.props.updateProfileData(data)
     }
 
     update(id) {
         var i
-        var experiences = this.state.experiences
-        //var update = this.state.updateExperience
+        var experiences = this.props.experienceData
+        var data = Object.assign({}, this.state.newContact)
+        var update = this.state.updateExperience
 
         for (i = 0; i < experiences.length; i++) {
             if (experiences[i].id == id) {               
-                experiences[i] = Object.assign({}, experiences[i], this.state.updateExperience)
+                experiences[i] = Object.assign({}, experiences[i], update)
             }
         }
-
+        data.experience = experiences
         this.setState({
-            experiences: experiences,
+            newContact: { experience: experiences },
             editId: '',
             updateExperience: {
                 company: '',
                 position: '',
-                startDate: '',
-                endDate: '',
+                start: '',
+                end: '',
                 responsibilities: ''
             }
         })
+        this.props.updateProfileData(data)
+    }
+
+    edit(id) {
+       var experiences = this.props.experienceData
+
+       for (var i = 0; i < experiences.length; i++) {
+           if (experiences[i].id == id) {
+               this.setState({
+                   editId: id,
+                   updateExperience: Object.assign({}, experiences[i])
+               })
+           }
+       }
     }
 
     cancelAdd() {
         this.setState({
             showAddSection: false,
             addExperience: {
-                id: '',
                 company: '',
                 position: '',
-                startDate: '',
-                endDate: '',
+                start: '',
+                end: '',
                 responsibilities: ''
             }
         })
@@ -150,30 +259,15 @@ export class Experience extends React.Component {
             updateExperience: {
                 company: '',
                 position: '',
-                startDate: '',
-                endDate: '',
+                start: '',
+                end: '',
                 responsibilities: ''
             }
         })
     }
 
-    edit(id) {
-
-        var i
-        var experiences = this.state.experiences
-        //var update = this.state.updateExperience
-
-        for (i = 0; i < experiences.length; i++) {
-            if (experiences[i].id == id) {
-                this.setState({
-                    editId: id,
-                    updateExperience: Object.assign({}, this.state.experiences[i])
-                })
-            }
-        }        
-    }
-
     render() {
+        //console.log("render props data: ", this.props.experienceData)
         return (
             <div className='ui sixteen wide column'>
                 {this.state.showAddSection ? this.renderAdd() : ''}
@@ -196,7 +290,7 @@ export class Experience extends React.Component {
                             </Table.Row>
                         </Table.Header>
                         <Table.Body>
-                            {this.state.experiences.map(experience => experience.id === this.state.editId ? this.renderUpdateRow(experience) : this.renderRow(experience))}
+                            {this.props.experienceData.map(experience => experience.id === this.state.editId ? this.renderUpdateRow(experience) : this.renderRow(experience))}
                         </Table.Body>
                     </Table>
                 </div >            
@@ -205,6 +299,7 @@ export class Experience extends React.Component {
     }
 
     renderAdd() {
+        //console.log("renderAdd props data: ", this.props.experienceData)
         return (
             <div>
                 <label>Company:</label>
@@ -226,9 +321,19 @@ export class Experience extends React.Component {
                     onChange={this.handleChange}
                 />
                 <label>Start Date:</label>
-                <DatePicker />
+                <DatePicker
+                    dateFormat="DD/MM/YYYY"
+                    name="start"
+                    selected={this.state.addExperience.start ? this.state.addExperience.start : Moment()}
+                    onChange={this.handleChangeStartDate}
+                />
                 <label>End Date:</label>
-                <DatePicker />
+                <DatePicker
+                    disabled={!this.state.isEndEnabled}
+                    name="end"
+                    selected={this.state.addExperience.end ? this.state.addExperience.end : Moment()}
+                    onChange={this.handleChangeEndDate}
+                />
                 <label>Responsibilities:</label>
                 <input
                     type="text"
@@ -266,9 +371,19 @@ export class Experience extends React.Component {
                     onChange={this.handleUpdate}
                 />
                 <label>Start Date:</label>
-                <DatePicker />
+                    <DatePicker
+                        dateFormat="DD/MM/YYYY"
+                        name="start"
+                        selected={this.state.updateExperience.start}
+                        onChange={this.handleUpdateStartDate}
+                />
                 <label>End Date:</label>
-                <DatePicker />
+                    <DatePicker
+                        dateFormat="DD/MM/YYYY"
+                        name="end"
+                        selected={this.state.updateExperience.end}
+                        onChange={this.handleUpdateEndDate}
+                />
                 <label>Responsibilities:</label>
                 <input
                     type="text"
@@ -286,15 +401,16 @@ export class Experience extends React.Component {
     }
 
     renderRow(experience) {
+        //console.log("renderRow props data: ", this.props.experienceData)
         return (
             <Table.Row key={experience.id}>
                 <Table.Cell>{experience.company}</Table.Cell>
                 <Table.Cell>{experience.position}</Table.Cell>
                 <Table.Cell>{experience.responsibilities}</Table.Cell>
-                <Table.Cell>{experience.startDate}</Table.Cell>
-                <Table.Cell>{experience.endDate}</Table.Cell>
+                <Table.Cell>{Moment(experience.start).format("Do MMM, YYYY")}</Table.Cell>
+                <Table.Cell>{Moment(experience.end).format("Do MMM, YYYY")}</Table.Cell>
                 <Table.Cell>
-                    <button type="button" className="ui edit button" onClick={() => { this.edit(experience.id) }} > <Icon name='edit' /></button>
+                    <button type="button" className="ui edit button" onClick={() => this.edit(experience.id)} > <Icon name='edit' /></button>
                     <button type="button" className="ui delete button" onClick={() => { this.delete(experience.id) }} ><Icon name='delete' /></button>
                 </Table.Cell>
             </Table.Row>)

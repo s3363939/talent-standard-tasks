@@ -65,21 +65,25 @@ export class Skill extends React.Component {
 
     addSkill() {
         var addSkill = this.state.addSkill
-        var skills = this.props.skillData
-        var data = Object.assign({}, this.state.newContact)
-        data.skills = skills
-        addSkill.id = addSkill.id + 1
-        data.skills.push(addSkill)
+        if (addSkill.name == "" || addSkill.level == "")
+            TalentUtil.notification.show("Please enter skill and level", "error", null, null)
+        else {
+            var skills = this.props.skillData
+            var data = Object.assign({}, this.state.newContact)
+            data.skills = skills
+            addSkill.id = addSkill.id + 1
+            data.skills.push(addSkill)
 
-        this.props.updateProfileData(data)
-        
-        this.setState({
-            showAddSection: false,
-            addSkill: {
-                name: '',
-                level: ''
-            }
-        })
+            this.props.updateProfileData(data)
+
+            this.setState({
+                showAddSection: false,
+                addSkill: {
+                    name: '',
+                    level: ''
+                }
+            })
+        }
     }
 
     deleteSkill(id) {
