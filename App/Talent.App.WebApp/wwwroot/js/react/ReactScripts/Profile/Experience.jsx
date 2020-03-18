@@ -267,11 +267,10 @@ export class Experience extends React.Component {
     }
 
     render() {
-        //console.log("render props data: ", this.props.experienceData)
         return (
             <div className='ui sixteen wide column'>
                 {this.state.showAddSection ? this.renderAdd() : ''}
-
+                <br />
                 <div>
                     <Table celled>
                         <Table.Header>
@@ -299,52 +298,73 @@ export class Experience extends React.Component {
     }
 
     renderAdd() {
-        //console.log("renderAdd props data: ", this.props.experienceData)
         return (
-            <div>
-                <label>Company:</label>
-                <input
-                    type="text"
-                    name="company"
-                    value={this.state.addExperience.company ? this.state.addExperience.company : ''}
-                    placeholder="Company"
-                    maxLength={20}
-                    onChange={this.handleChange}
-                />
-                <label>Position:</label>
-                <input
-                    type="text"
-                    name="position"
-                    value={this.state.addExperience.position ? this.state.addExperience.position : ''}
-                    placeholder="Position"
-                    maxLength={20}
-                    onChange={this.handleChange}
-                />
-                <label>Start Date:</label>
-                <DatePicker
-                    dateFormat="DD/MM/YYYY"
-                    name="start"
-                    selected={this.state.addExperience.start ? this.state.addExperience.start : Moment()}
-                    onChange={this.handleChangeStartDate}
-                />
-                <label>End Date:</label>
-                <DatePicker
-                    disabled={!this.state.isEndEnabled}
-                    name="end"
-                    selected={this.state.addExperience.end ? this.state.addExperience.end : Moment()}
-                    onChange={this.handleChangeEndDate}
-                />
-                <label>Responsibilities:</label>
-                <input
-                    type="text"
-                    name="responsibilities"
-                    value={this.state.addExperience.responsibilities ? this.state.addExperience.responsibilities : ''}
-                    placeholder="Responsibilities"
-                    maxLength={20}
-                    onChange={this.handleChange}
-                />  
-                <button type="button" className="ui teal button" onClick={this.add}>Add</button>
-                <button type="button" className="ui button" onClick={() => { this.cancelAdd() }}>Cancel</button>
+            <div class="ui grid">
+                <div class="row">
+                    <div class="eight wide column">
+                        <label>Company:</label>
+                        <input
+                            type="text"
+                            name="company"
+                            value={this.state.addExperience.company ? this.state.addExperience.company : ''}
+                            placeholder="Company"
+                            maxLength={20}
+                            onChange={this.handleChange}
+                        />
+                    </div>
+                    <div class="eight wide column">
+                        <label>Position:</label>
+                        <input
+                            type="text"
+                            name="position"
+                            value={this.state.addExperience.position ? this.state.addExperience.position : ''}
+                            placeholder="Position"
+                            maxLength={20}
+                            onChange={this.handleChange}
+                        />
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="eight wide column">
+                        <label>Start Date:</label>
+                        <br />
+                        <DatePicker
+                            dateFormat="DD/MM/YYYY"
+                            name="start"
+                            selected={this.state.addExperience.start ? this.state.addExperience.start : Moment()}
+                            onChange={this.handleChangeStartDate}
+                        />
+                    </div>
+                    <div class="eight wide column">
+                        <label>End Date:</label>
+                        <br />
+                        <DatePicker
+                            disabled={!this.state.isEndEnabled}
+                            name="end"
+                            selected={this.state.addExperience.end ? this.state.addExperience.end : Moment()}
+                            onChange={this.handleChangeEndDate}
+                        />                        
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="sixteen wide column">
+                        <label>Responsibilities:</label>
+                        <input
+                            type="text"
+                            name="responsibilities"
+                            value={this.state.addExperience.responsibilities ? this.state.addExperience.responsibilities : ''}
+                            placeholder="Responsibilities"
+                            maxLength={20}
+                            onChange={this.handleChange}
+                        />  
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="sixteen wide column">
+                        <button type="button" className="ui teal button" onClick={this.add}>Add</button>
+                        <button type="button" className="ui button" onClick={() => { this.cancelAdd() }}>Cancel</button>
+                    </div>
+                </div>
             </div >)
     }
 
@@ -352,56 +372,58 @@ export class Experience extends React.Component {
         return (
             <Table.Row key={experience.id}>
                 <Table.Cell>
-                <label>Company:</label>
-                <input
-                    type="text"
-                    name="company"
-                    value={this.state.updateExperience.company ? this.state.updateExperience.company : experience.company}
-                    placeholder="Company"
-                    maxLength={20}
-                    onChange={this.handleUpdate}
-                />
-                <label>Position:</label>
-                <input
-                    type="text"
-                    name="position"
-                    value={this.state.updateExperience.position ? this.state.updateExperience.position : experience.position}
-                    placeholder="Position"
-                    maxLength={20}
-                    onChange={this.handleUpdate}
-                />
-                <label>Start Date:</label>
-                    <DatePicker
-                        dateFormat="DD/MM/YYYY"
-                        name="start"
-                        selected={this.state.updateExperience.start}
-                        onChange={this.handleUpdateStartDate}
-                />
-                <label>End Date:</label>
-                    <DatePicker
-                        dateFormat="DD/MM/YYYY"
-                        name="end"
-                        selected={this.state.updateExperience.end}
-                        onChange={this.handleUpdateEndDate}
-                />
-                <label>Responsibilities:</label>
-                <input
-                    type="text"
-                    name="responsibilities"
-                    value={this.state.updateExperience.responsibilities ? this.state.updateExperience.responsibilities : experience.responsibilities}
-                    placeholder="Responsibilities"
-                    maxLength={20}
-                    onChange={this.handleUpdate}
-                />  
+                                <label>Company:</label>
+                                <input
+                                    type="text"
+                                    name="company"
+                                    value={this.state.updateExperience.company ? this.state.updateExperience.company : experience.company}
+                                    placeholder="Company"
+                                    maxLength={20}
+                                    onChange={this.handleUpdate}
+                                />
+                                <label>Position:</label>
+                                <input
+                                    type="text"
+                                    name="position"
+                                    value={this.state.updateExperience.position ? this.state.updateExperience.position : experience.position}
+                                    placeholder="Position"
+                                    maxLength={20}
+                                    onChange={this.handleUpdate}
+                    />
+                    <br/>
+                                <label>Start Date:</label>
+                                    <DatePicker
+                                        dateFormat="DD/MM/YYYY"
+                                        name="start"
+                                        selected={Moment(this.state.updateExperience.start)}
+                                        onChange={this.handleUpdateStartDate}
+                    />
+                    <br />
+                                <label>End Date:</label>
+                                    <DatePicker
+                                        dateFormat="DD/MM/YYYY"
+                                        name="end"
+                                        selected={Moment(this.state.updateExperience.end)}
+                                        onChange={this.handleUpdateEndDate}
+                    />
+                    <br />
+                                <label>Responsibilities:</label>
+                                <input
+                                    type="text"
+                                    name="responsibilities"
+                                    value={this.state.updateExperience.responsibilities ? this.state.updateExperience.responsibilities : experience.responsibilities}
+                                    placeholder="Responsibilities"
+                                    maxLength={20}
+                                    onChange={this.handleUpdate}
+                                />  
+                                <button type="button" className="ui teal button" onClick={() => { this.update(experience.id) }} >Update</button>
+                                <button type="button" className="ui button" onClick={() => { this.cancelUpdate() }} >Cancel</button>
 
-                <button type="button" className="ui teal button" onClick={() => { this.update(experience.id) }} >Update</button>
-                <button type="button" className="ui button" onClick={() => { this.cancelUpdate() }} >Cancel</button>
                 </Table.Cell>
             </Table.Row>)
     }
 
     renderRow(experience) {
-        //console.log("renderRow props data: ", this.props.experienceData)
         return (
             <Table.Row key={experience.id}>
                 <Table.Cell>{experience.company}</Table.Cell>

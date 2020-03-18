@@ -83,7 +83,7 @@ namespace Talent.Services.Identity.Controllers
             }
         }
 
-      
+
 
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         public IActionResult Get()
@@ -92,9 +92,9 @@ namespace Talent.Services.Identity.Controllers
             return Content("Secured");
         }
 
-        
 
-       
+
+
         [HttpPost("verifyResetPasswordToken")]
         public async Task<ActionResult> VerifyResetPasswordToken([FromQuery]string o, [FromQuery]string p)
         {
@@ -110,7 +110,7 @@ namespace Talent.Services.Identity.Controllers
         }
 
 
-       
+
 
         [HttpGet("getAccountSettingInfo")]
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
@@ -227,7 +227,7 @@ namespace Talent.Services.Identity.Controllers
 
 
 
-        
+
 
         [HttpPost("verifyClientToken")]
         public async Task<ActionResult> VeifyClientToken([FromQuery]string recruiterEmail, [FromQuery]string clientEmail, [FromQuery]string resetPasswordToken)
@@ -264,7 +264,7 @@ namespace Talent.Services.Identity.Controllers
             }
         }
 
-        
+
         #endregion
     }
 }

@@ -1,6 +1,7 @@
 ﻿/* Photo upload section */
 import React from 'react'
-import Cookies from 'js-cookie';
+import Cookies from 'js-cookie'
+import { Icon } from 'semantic-ui-react';
 
 export class PhotoUpload extends React.Component {
 
@@ -20,15 +21,15 @@ export class PhotoUpload extends React.Component {
 
         this.state = {
             selectedFile: [],
-            selectedFileName: [],
+            selectedFileName: '',
             imageSrc: this.props.imageSrc,
-            imageId: [],
-            selectedRemoveFileId: []
+            imageId: '',
+            imgSelected: false
         }
     };
 
     loadImages(Id) {
-
+        console.log("loadImages");
         var cookies = Cookies.get('talentAuthToken');
 
         $.ajax({
@@ -59,8 +60,7 @@ export class PhotoUpload extends React.Component {
                     imageId: imageIdArr,
                     selectedFile: selectedFileArr,
                     selectedFileName: [],
-                    selectedRemoveFileId: [],
-                    currentNoOfFiles: res.employerProfile.length
+                    selectedRemoveFileId: []
                 });
             }.bind(this)
         });
@@ -75,19 +75,18 @@ export class PhotoUpload extends React.Component {
         const file = this.fileUpload.files[0];
         console.log("Img: ", file);
 
-        /*let localSelectedFile = this.state.selectedFile;
+        let localSelectedFile = this.state.selectedFile;
         let localSelectedFileName = this.state.selectedFileName;
         let localImageSrc = this.state.imageSrc;
         let localImageId = this.state.imageId;
        
-        if (event.target.files[i].size > this.maxFileSize || this.acceptedFileType.indexOf(event.target.files[i].type) == -1) {
+        if (event.target.files[0].size > this.maxFileSize || this.acceptedFileType.indexOf(event.target.files[0].type) == -1) {
             TalentUtil.notification.show("Max file size is 2 MB and supported file types are *.jpg, *.jpeg, *.png, *.gif", "error", null, null);
         } else {
-            localSelectedFile = localSelectedFile.concat(event.target.files[i]),
-                localSelectedFileName = localSelectedFileName.concat(event.target.files[i].name),
-                localImageSrc = localImageSrc.concat(window.URL.createObjectURL(event.target.files[i])),
-                localImageId = localImageId.concat('0'),
-                localCurrentNoOfFiles = localCurrentNoOfFiles + 1
+            localSelectedFile = event.target.files[0],
+            localSelectedFileName = event.target.files[0].name,
+            localImageSrc = window.URL.createObjectURL(event.target.files[0]),
+            localImageId = 0
         }
         
 
@@ -96,8 +95,8 @@ export class PhotoUpload extends React.Component {
             selectedFileName: localSelectedFileName,
             imageSrc: localImageSrc,
             imageId: localImageId,
-            currentNoOfFiles: localCurrentNoOfFiles
-        })*/
+            imgSelected: true
+        })
     }
 
     /*removeFile(event) {
@@ -106,7 +105,6 @@ export class PhotoUpload extends React.Component {
         let localSelectedFileName = this.state.selectedFileName;
         let localImageSrc = this.state.imageSrc;
         let localImageId = this.state.imageId;
-        let localCurrentNoOfFiles = this.state.currentNoOfFiles;
 
         localselectedRemoveFileId = localselectedRemoveFileId.concat(event.target.getAttribute('imageid'));
         localSelectedFile.splice(event.target.getAttribute('value'), 1);
@@ -119,26 +117,23 @@ export class PhotoUpload extends React.Component {
             selectedFileName: localSelectedFileName,
             imageSrc: localImageSrc,
             imageId: localImageId,
-            selectedRemoveFileId: localselectedRemoveFileId,
-            currentNoOfFiles: this.state.currentNoOfFiles - 1
+            selectedRemoveFileId: localselectedRemoveFileId
         })
     }*/
 
-    fileUploadHandler(Id) {
+    fileUploadHandler() {
+        console.log("fileUploadHandler", this.state.selectedFile);
         let data = new FormData();
-        for (var i = 0; i < this.state.selectedFile.length; i++) {
-            if (this.state.selectedFile[i] != "") {
-                data.append('file' + i, this.state.selectedFile[i]);
-            }
-        }
 
-        data.append('Id', Id);
-        data.append('FileRemoveId', this.state.selectedRemoveFileId);
-
+        data.append("upload_file", true);
+        data.append("file", this.state.selectedFile, "ProfileImg");
+        /*for (var key of data.entries()) {
+            console.log("data",key[0] );
+        }*/
         var cookies = Cookies.get('talentAuthToken');
 
         $.ajax({
-            url: 'http://localhost:60290/profile/profile/addEmployerProfileImages',
+            url: this.props.savePhotoUrl,
             headers: {
                 'Authorization': 'Bearer ' + cookies
             },
@@ -149,30 +144,54 @@ export class PhotoUpload extends React.Component {
             contentType: false,
             success: function (res) {
                 if (res.success) {
-                    this.loadImages(Id);
+                    //this.loadImages(Id);
+
+                    console.log("Upload success");
+
+                    this.setState({
+                        selectedFile: [],
+                        selectedFileName: '',
+                        imageId: '',
+                        imgSelected: false
+                    })
                 } else {
+                    console.log("RES: ", res);
                     TalentUtil.notification.show(res.message, "error", null, null);
                 }
             }.bind(this),
             error: function (res, status, error) {
                 //Display error
-                TalentUtil.notification.show("There is an error when updating Images - " + error, "error", null, null);
+                TalentUtil.notification.show("There is an error when updating Image - " + error, "error", null, null);
             }
         });
     }
 
     renderProfileImg() {
         //console.log("renderProfileImg");
-        return (
-            <span>
-                <img
-                    style={{ height: 112, width: 112, borderRadius: 55 }}
-                    className="ui small"
-                    src={this.props.imageSrc}
-                    alt="Image Not Found"
-                />
-            </span>
-        );
+        if (this.state.imgSelected) {
+            return (
+                <span>
+                    <img
+                        style={{ height: 112, width: 112, borderRadius: 55 }}
+                        className="ui small"
+                        src={this.state.imageSrc}
+                        alt="Image Not Found"
+                    />
+                    <button type="button" className="ui teal button" onClick={this.fileUploadHandler}><Icon name='upload' />Upload</button>
+                </span>
+            );
+        } else {
+            return (
+                <span>
+                    <img
+                        style={{ height: 112, width: 112, borderRadius: 55 }}
+                        className="ui small"
+                        src={this.props.imageSrc}
+                        alt="Image Not Found"
+                    />
+                </span>
+            );
+        }        
     }
 
     renderDefaultProfileImg() {

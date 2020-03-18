@@ -58,9 +58,17 @@ export class TalentStatus extends React.Component {
 
     render() {
         return (
-            <div className='ui sixteen wide column'>   
-                {this.renderCheckBoxes()}
-                {this.renderDate()}
+            <div className="ui grid">
+                <div className="row">
+                    <div className="sixteen wide column"> 
+                        {this.renderCheckBoxes()}
+                    </div>
+                </div>
+                <div className="row">
+                    <div className="sixteen wide column">
+                        {this.renderDate()}
+                    </div>
+                </div>
             </div>)
     }
 
@@ -128,6 +136,7 @@ export class TalentStatus extends React.Component {
             return (
                 <div>
                     <label>Availability date</label>
+                    <br/>
                     <DatePicker
                         dateFormat="DD/MM/YYYY"
                         name="available"

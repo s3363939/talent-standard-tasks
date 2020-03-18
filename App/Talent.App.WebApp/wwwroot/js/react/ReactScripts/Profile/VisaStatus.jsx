@@ -38,21 +38,27 @@ export class VisaStatus extends React.Component {
 
     render() {
         return (
-            <div className='ui sixteen wide column'>
-                <label>Visa type</label>
-                <select className="ui right labeled dropdown"
-                    value={this.props.visaStatus ? this.props.visaStatus : ''}
-                    onChange={this.updateContact}
-                    name="visaStatus">
-                    <option value="">Visa type</option>
-                    <option value="Citizen">Citizen</option>
-                    <option value="Permanent Resident">Permanent Resident</option>
-                    <option value="Work Visa">Work Visa</option>
-                    <option value="Student Visa">Student Visa</option>
-                </select>
-                {this.renderExpiryDate()}                
-                <button type="button" className="ui teal button" onClick={this.saveContact}>Save</button>
-            </div>
+                <div className="row">
+                    <div className="six wide column">
+                        <label>Visa type</label>
+                        <select className="ui right labeled dropdown"
+                            value={this.props.visaStatus ? this.props.visaStatus : ''}
+                            onChange={this.updateContact}
+                            name="visaStatus">
+                            <option value="">Visa type</option>
+                            <option value="Citizen">Citizen</option>
+                            <option value="Permanent Resident">Permanent Resident</option>
+                            <option value="Work Visa">Work Visa</option>
+                            <option value="Student Visa">Student Visa</option>
+                        </select>
+                    </div>
+                    <div className="six wide column">
+                        {this.renderExpiryDate()}
+                    </div>
+                    <div className="four wide column">
+                        <button type="button" className="ui teal button" onClick={this.saveContact}>Save</button>
+                    </div>
+                </div>
         )      
     }
 
@@ -61,6 +67,7 @@ export class VisaStatus extends React.Component {
             return (
                 <div>
                     <label>Visa expiry date</label>
+                    <br />
                     <DatePicker
                         dateFormat="DD/MM/YYYY"
                         name="expiry"

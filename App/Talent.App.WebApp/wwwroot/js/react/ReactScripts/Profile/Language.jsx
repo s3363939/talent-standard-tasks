@@ -137,6 +137,7 @@ export class Language extends React.Component {
         return (
             <div className='ui sixteen wide column'>
                 {this.state.showAddSection ? this.renderAddLanguage() : ''}
+                <br />
                 <div>
                     <Table celled>
                         <Table.Header>
@@ -161,28 +162,36 @@ export class Language extends React.Component {
 
     renderAddLanguage() {
         return (
-            <div>
-                <input
-                    type="text"
-                    name="name"
-                    value={this.state.addLanguage.name ? this.state.addLanguage.name : ''}
-                    placeholder="Add Language"
-                    maxLength={20}
-                    onChange={this.handleChange}
-                />
-                <select className="ui right labeled dropdown"
-                    value={this.state.addLanguage.level ? this.state.addLanguage.level : ''}
-                    onChange={this.handleChange}
-                    name="level">
-                    <option value="">Language Level</option>
-                    <option value="Basic">Basic</option>
-                    <option value="Conversational">Conversational</option>
-                    <option value="Fluent">Fluent</option>
-                    <option value="Native/Bilingual">Native/Bilingual</option>
-                </select>
-                <button type="button" className="ui teal button" onClick={this.addLanguage}>Add</button>
-                <button type="button" className="ui button" onClick={() => { this.cancelAddLanguage() }}>Cancel</button>
-            </div >)
+            <div class="ui grid">
+                <div class="row">
+                    <div class="five wide column">
+                        <input
+                            type="text"
+                            name="name"
+                            value={this.state.addLanguage.name ? this.state.addLanguage.name : ''}
+                            placeholder="Add Language"
+                            maxLength={20}
+                            onChange={this.handleChange}
+                        />
+                    </div>
+                    <div class="five wide column">
+                        <select className="ui right labeled dropdown"
+                            value={this.state.addLanguage.level ? this.state.addLanguage.level : ''}
+                            onChange={this.handleChange}
+                            name="level">
+                            <option value="">Language Level</option>
+                            <option value="Basic">Basic</option>
+                            <option value="Conversational">Conversational</option>
+                            <option value="Fluent">Fluent</option>
+                            <option value="Native/Bilingual">Native/Bilingual</option>
+                        </select>
+                    </div>
+                    <div class="six wide column">
+                        <button type="button" className="ui teal button" onClick={this.addLanguage}>Add</button>
+                        <button type="button" className="ui button" onClick={() => { this.cancelAddLanguage() }}>Cancel</button>
+                    </div>
+                </div>
+            </div>)
     }
 
     renderUpdateRow(language) {

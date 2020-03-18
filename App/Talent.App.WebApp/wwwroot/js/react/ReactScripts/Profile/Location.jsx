@@ -121,76 +121,84 @@ export class Address extends React.Component {
         }        
 
         return (
-            <div className='ui sixteen wide column'>
-                <div className='ui four wide column'>
-                    <label>Number</label>
-                    <input
-                        type="text"
-                        name="number"
-                        value={this.state.newAddress.number ? this.state.newAddress.number : ""}
-                        placeholder="Number"
-                        maxLength={10}
-                        onChange={this.handleChange}
-                    />
+            <div className="ui grid">
+                <div className="row">
+                    <div className="four wide column">
+                        <label>Number</label>
+                        <input
+                            type="text"
+                            name="number"
+                            value={this.state.newAddress.number ? this.state.newAddress.number : ""}
+                            placeholder="Number"
+                            maxLength={10}
+                            onChange={this.handleChange}
+                        />
+                    </div>
+                    <div className="eight wide column">
+                        <label>Street</label>
+                        <input
+                            type="text"
+                            name="street"
+                            value={this.state.newAddress.street ? this.state.newAddress.street : ""}
+                            placeholder="street name"
+                            maxLength={80}
+                            onChange={this.handleChange}
+                        />
+                    </div>
+                    <div className="four wide column">
+                        <label>Suburb</label>
+                        <input
+                            type="text"
+                            name="suburb"
+                            value={this.state.newAddress.suburb ? this.state.newAddress.suburb : ""}
+                            placeholder="suburb name"
+                            maxLength={20}
+                            onChange={this.handleChange}
+                        />
+                    </div>
                 </div>
-                <div className='ui eight wide column'>
-                    <label>Street</label>
-                    <input
-                        type="text"
-                        name="street"
-                        value={this.state.newAddress.street ? this.state.newAddress.street : ""}
-                        placeholder="street name"
-                        maxLength={80}
-                        onChange={this.handleChange}
-                    />
+                <div className="row">
+                    <div className="six wide column">
+                        <label>Country</label>
+                        <select className="ui right labeled dropdown"
+                            placeholder="Country"
+                            value={this.state.newAddress.country ? this.state.newAddress.country : ""}
+                            onChange={this.handleDropdownChange}
+                            name="country">
+                            <option value="">Select a country</option>
+                            {countryOptions}
+                        </select>
+                    </div>
+                    <div className="six wide column">
+                        <label>City</label>
+                        <select className="ui right labeled dropdown"
+                            placeholder="City"
+                            value={this.state.newAddress.city ? this.state.newAddress.city : ""}
+                            onChange={this.handleDropdownChange}
+                            name="city"
+                        >
+                            <option value="">{this.state.enableCity ? "Select a city" : "Select country first"}</option>
+                            {cityOptions}
+                        </select>
+                    </div>
+                    <div className="four wide column">
+                        <label>Postcode</label>
+                        <input
+                            type="text"
+                            name="postCode"
+                            value={this.state.newAddress.postCode ? this.state.newAddress.postCode : ""}
+                            placeholder="posCode"
+                            maxLength={20}
+                            onChange={this.handleChange}
+                        />
+                    </div>
                 </div>
-                <div className='ui four wide column'>
-                    <label>Suburb</label>
-                    <input
-                        type="text"
-                        name="suburb"
-                        value={this.state.newAddress.suburb ? this.state.newAddress.suburb : ""}
-                        placeholder="suburb name"
-                        maxLength={20}
-                        onChange={this.handleChange}
-                    />
+                <div className="row">
+                    <div className="six wide column">
+                        <button type="button" className="ui teal button" onClick={this.saveContact}>Save</button>
+                        <button type="button" className="ui button" onClick={this.closeEdit}>Cancel</button>
+                    </div>
                 </div>
-                <div className='ui six wide column'>
-                    <label>Country</label>
-                    <select className="ui right labeled dropdown"
-                        placeholder="Country"
-                        value={this.state.newAddress.country ? this.state.newAddress.country : ""}
-                        onChange={this.handleDropdownChange}
-                        name="country">
-                        <option value="">Select a country</option>
-                        {countryOptions}
-                    </select>
-                </div>
-                <div className='ui six wide column'>
-                    <label>City</label>
-                    <select className="ui right labeled dropdown"
-                        placeholder="City"
-                        value={this.state.newAddress.city ? this.state.newAddress.city : ""}
-                        onChange={this.handleDropdownChange}
-                        name="city"
-                    >
-                        <option value="">{this.state.enableCity ? "Select a city" : "Select country first"}</option>
-                        {cityOptions}
-                    </select>
-                </div>
-                <div className='ui four wide column'>
-                    <label>Postcode</label>
-                    <input
-                        type="text"
-                        name="postCode"
-                        value={this.state.newAddress.postCode ? this.state.newAddress.postCode : ""}
-                        placeholder="posCode"
-                        maxLength={20}
-                        onChange={this.handleChange}
-                    />
-                </div>
-                <button type="button" className="ui teal button" onClick={this.saveContact}>Save</button>
-                <button type="button" className="ui button" onClick={this.closeEdit}>Cancel</button>
             </div>
         )
     }
@@ -234,15 +242,19 @@ export class Nationality extends React.Component {
         const countriesOptions = Object.keys(Countries).map((x) => <option key={x} value={x}>{x}</option>);  
 
         return (
-            <div className='ui sixteen wide column'>
-                <select className="ui right labeled dropdown"
-                    placeholder="Country"
-                    value={this.props.nationalityData ? this.props.nationalityData : ""}
-                    onChange={this.handleChange}
-                    name="nationality">
-                    <option value="">Select your nationality</option>
-                    {countriesOptions}
-                </select>
+            <div className="ui grid">
+                <div className="row">
+                    <div className="sixteen wide column">
+                        <select className="ui right labeled dropdown"
+                            placeholder="Country"
+                            value={this.props.nationalityData ? this.props.nationalityData : ""}
+                            onChange={this.handleChange}
+                            name="nationality">
+                            <option value="">Select your nationality</option>
+                            {countriesOptions}
+                        </select>
+                    </div>
+                </div>
             </div>
         )
     }

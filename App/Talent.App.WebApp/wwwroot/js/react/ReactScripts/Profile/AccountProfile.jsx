@@ -38,6 +38,7 @@ export default class AccountProfile extends React.Component {
                 visaStatus: '',
                 visaExpiryDate: '',
                 profilePhoto: '',
+                profilePhotoUrl: '',
                 linkedAccounts: {
                     linkedIn: "",
                     github: ""
@@ -175,7 +176,8 @@ export default class AccountProfile extends React.Component {
                                         </FormItemWrapper>     
                                         <FormItemWrapper
                                             title='Address'
-                                            tooltip='Enter your current address'>
+                                            tooltip='Enter your current address'
+                                        >
                                             <Address
                                                 addressData={this.state.profileData.address}
                                                 updateProfileData={this.updateWithoutSave}

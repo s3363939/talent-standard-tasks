@@ -142,6 +142,7 @@ export class Skill extends React.Component {
         return (
             <div className='ui sixteen wide column'>
                 {this.state.showAddSection ? this.renderAddSkill() : ''}
+                <br />
                 <div>
                     <Table celled>
                         <Table.Header>
@@ -166,26 +167,34 @@ export class Skill extends React.Component {
 
     renderAddSkill() {
         return (
-            <div>
-                <input
-                    type="text"
-                    name="name"
-                    value={this.state.addSkill.name ? this.state.addSkill.name : ''}
-                    placeholder="Add Skill"
-                    maxLength={20}
-                    onChange={this.handleChange}
-                />
-                <select className="ui right labeled dropdown"
-                    value={this.state.addSkill.level ? this.state.addSkill.level : ''}
-                    onChange={this.handleChange}
-                    name="level">
-                    <option value="">Skill Level</option>
-                    <option value="Beginner">Beginner</option>
-                    <option value="Intermediate">Intermediate</option>
-                    <option value="Expert">Expert</option>
-                </select>
-                <button type="button" className="ui teal button" onClick={this.addSkill}>Add</button>
-                <button type="button" className="ui button" onClick={() => { this.cancelAddSkill() }}>Cancel</button>
+            <div class="ui grid">
+                <div class="row">
+                    <div class="five wide column">
+                        <input
+                            type="text"
+                            name="name"
+                            value={this.state.addSkill.name ? this.state.addSkill.name : ''}
+                            placeholder="Add Skill"
+                            maxLength={20}
+                            onChange={this.handleChange}
+                        />
+                    </div>
+                    <div class="five wide column">
+                        <select className="ui right labeled dropdown"
+                            value={this.state.addSkill.level ? this.state.addSkill.level : ''}
+                            onChange={this.handleChange}
+                            name="level">
+                            <option value="">Skill Level</option>
+                            <option value="Beginner">Beginner</option>
+                            <option value="Intermediate">Intermediate</option>
+                            <option value="Expert">Expert</option>
+                        </select>
+                    </div>
+                    <div class="six wide column">
+                        <button type="button" className="ui teal button" onClick={this.addSkill}>Add</button>
+                        <button type="button" className="ui button" onClick={() => { this.cancelAddSkill() }}>Cancel</button>
+                    </div>
+                </div>
             </div >)
     }
 
