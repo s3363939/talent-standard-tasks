@@ -36,7 +36,7 @@ export default class TalentCard extends React.Component {
     loadData() {
         /*var cookies = Cookies.get('talentAuthToken');
         $.ajax({
-            url: 'http://localhost:60290/profile/profile/getEmployerProfile',
+            url: 'https://talentservicesprofile20200318063802.azurewebsites.net/profile/profile/getEmployerProfile',
             headers: {
                 'Authorization': 'Bearer ' + cookies,
                 'Content-Type': 'application/json'
@@ -100,15 +100,23 @@ export default class TalentCard extends React.Component {
                                 </div>
                                 <div className="eight wide column">
                                     <Card.Content>
-                                        <Card.Header>Talent snapshot</Card.Header>
+                                        <Card.Header><b>Talent snapshot</b></Card.Header>
                                         <br />
                                         <Card.Description>
                                             CURRENT EMPLOYER
-                                        <br />
+                                            <br />
+                                            ABC
+                                            <br />
+                                            <br />
                                             VISA STATUS
-                                        <br />
+                                            <br />
+                                            Citizen
+                                            <br />
+                                            <br />
                                             POSITION
-                                    </Card.Description>
+                                            <br />
+                                            Software Developer
+                                        </Card.Description>
                                     </Card.Content>
                                 </div>
                             </div>

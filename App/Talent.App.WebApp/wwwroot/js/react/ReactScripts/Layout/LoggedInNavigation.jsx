@@ -14,12 +14,13 @@ export class LoggedInNavigation extends React.Component {
 
     componentDidMount() {
         this.isUserAuthenticated();
+
     }
 
     isUserAuthenticated() {
         var cookies = Cookies.get('talentAuthToken');
         $.ajax({
-            url: 'http://localhost:60290/profile/profile/isUserAuthenticated',
+            url: 'https://talentservicesprofile20200318063802.azurewebsites.net/profile/profile/isUserAuthenticated',
             headers: {
                 'Authorization': 'Bearer ' + cookies,
                 'Content-Type': 'application/json'

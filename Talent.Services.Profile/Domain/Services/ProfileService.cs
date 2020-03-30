@@ -368,44 +368,46 @@ namespace Talent.Services.Profile.Domain.Services
 
         public async Task<bool> UpdateTalentPhoto(string talentId, IFormFile file)
         {
-            System.Diagnostics.Debug.WriteLine("UpdateTalentPhoto");
-            var fileExtension = Path.GetExtension(file.FileName);
-            List<string> acceptedExtensions = new List<string> { ".jpg", ".png", ".gif", ".jpeg" };
-
-            if (fileExtension != null && !acceptedExtensions.Contains(fileExtension.ToLower()))
+            try
             {
-                System.Diagnostics.Debug.WriteLine("fileExtension");
-                return false;
-            }
+                User updatedUser = await _userRepository.GetByIdAsync(talentId);
 
-            var profile = (await _userRepository.Get(x => x.Id == talentId)).SingleOrDefault();
-
-            if (profile == null)
-            {
-                System.Diagnostics.Debug.WriteLine("no profile");
-                return false;
-            }
-
-            var newFileName = await _fileService.SaveFile(file, FileType.ProfilePhoto);
-
-            if (!string.IsNullOrWhiteSpace(newFileName))
-            {
-                var oldFileName = profile.ProfilePhoto;
-
-                if (!string.IsNullOrWhiteSpace(oldFileName))
+                if (updatedUser == null)
                 {
-                    await _fileService.DeleteFile(oldFileName, FileType.ProfilePhoto);
+                    return false;
                 }
 
-                profile.ProfilePhoto = newFileName;
-                profile.ProfilePhotoUrl = await _fileService.GetFileURL(newFileName, FileType.ProfilePhoto);
+                // Create a new FormFile so we can change the name before we pass it into _fileService.
+                // We don't want the file to be named as the uploader called it but rather named as the talent's id and the current date as ticks.
+                DateTime updatedDate = DateTime.Now;
+                string name = talentId + updatedDate.Ticks.ToString();
+                file = new Microsoft.AspNetCore.Http.Internal.FormFile(file.OpenReadStream(), 0, file.Length, name, name);
 
-                await _userRepository.Update(profile);
-                return true;
+                string url = await _fileService.SaveFile(file, FileType.ProfilePhoto);
+
+                if (!String.IsNullOrWhiteSpace(url))
+                {
+                    if (!String.IsNullOrWhiteSpace(updatedUser.ProfilePhoto))
+                    {
+                        await _fileService.DeleteFile(updatedUser.ProfilePhoto, FileType.ProfilePhoto);
+                    }
+
+                    // Save the profile photo name in the user document.
+                    updatedUser.ProfilePhoto = file.Name;
+                    updatedUser.ProfilePhotoUrl = url;
+                    updatedUser.UpdatedOn = updatedDate;
+
+                    await _userRepository.Update(updatedUser);
+
+                    return true;
+                }
+
+                return false;
             }
-            System.Diagnostics.Debug.WriteLine("END");
-
-            return false;
+            catch
+            {
+                return false;
+            }
         }
 
         public async Task<bool> AddTalentVideo(string talentId, IFormFile file)
